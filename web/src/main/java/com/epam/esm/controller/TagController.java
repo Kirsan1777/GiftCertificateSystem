@@ -6,9 +6,7 @@ import com.epam.esm.service.impl.TagServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -25,13 +23,13 @@ public class TagController {
     private final TagServiceImpl tagService;
 
     @Autowired
-    public TagController(TagServiceImpl tagService, TagDAO tagDAO){
+    public TagController(TagServiceImpl tagService){
         this.tagService = tagService;
     }
 
     @GetMapping("/firstPage")
     public Iterable<Tag> firstPage() {
-        return tagService.allTags(ASC);
+        return tagService.allTags();
     }
 
     @GetMapping("/{id}")
@@ -42,13 +40,13 @@ public class TagController {
     @PostMapping
     public Iterable<Tag> createTag(@ModelAttribute("tag") Tag tag){
         tagService.addTag(tag);
-        return tagService.allTags(ASC);
+        return tagService.allTags();
     }
 
     @DeleteMapping("/{id}")
     public Iterable<Tag> delete(@PathVariable("id") int id) {
         tagService.deleteTag(id);
-        return tagService.allTags(ASC);
+        return tagService.allTags();
     }
 
 }

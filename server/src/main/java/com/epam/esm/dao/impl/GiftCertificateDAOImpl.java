@@ -62,11 +62,19 @@ public class GiftCertificateDAOImpl {
         session.close();
     }
 
-    public int updateCertificate(GiftCertificate giftCertificate) {
+    /*public int updateCertificate(GiftCertificate giftCertificate) {
         return jdbcTemplate.update(SqlGiftCertificateQuery.UPDATE_CERTIFICATE,
                 giftCertificate.getDescription(), giftCertificate.getPrice(),
                 giftCertificate.getDuration(), giftCertificate.getCreateDate(),
                 giftCertificate.getLastUpdateDate(), giftCertificate.getName(), giftCertificate.getId());
+    }*/
+
+    public void updateCertificate(GiftCertificate giftCertificate) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.update(giftCertificate);
+        transaction.commit();
+        session.close();
     }
 
     public int updateCertificatePrice(int idGift, double price) {

@@ -43,7 +43,7 @@ public class GiftCertificateServiceImpl {
         gift.setLastUpdateDate(LocalDateTime.now());
         GiftCertificate giftTest = new GiftCertificate
                 (1, "1", 1, 1, LocalDateTime.now(), LocalDateTime.now(), "TestHibernate");
-        giftCertificate.save(giftTest);
+        giftCertificateDAO.updateCertificate(giftTest);
     }
 
     public int updateGiftCertificatePrice(int idGift, double price){

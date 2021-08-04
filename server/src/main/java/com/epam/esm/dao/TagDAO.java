@@ -23,7 +23,7 @@ public interface TagDAO extends CrudRepository<Tag, Integer> {
      *
      * @param name the tag name
      */
-    int addTag(String name);
+    void addTag(Tag name);
 
     /**
      * Method for delete tag

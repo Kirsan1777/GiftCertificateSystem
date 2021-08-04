@@ -12,7 +12,7 @@ import java.util.Objects;
 @Entity
 public class GiftTag {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String tagName;
     private String giftName;
     private double price;

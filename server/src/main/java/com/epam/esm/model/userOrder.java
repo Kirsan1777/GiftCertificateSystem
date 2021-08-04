@@ -12,7 +12,7 @@ import java.util.Objects;
 @Entity
 public class userOrder {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int idUser;
     private int idCertificate;

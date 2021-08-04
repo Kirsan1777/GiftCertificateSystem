@@ -9,7 +9,7 @@ import java.util.Objects;
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private double balance;
     private String name;

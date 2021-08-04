@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.impl.LinkTableDAOImpl;
 import com.epam.esm.dao.impl.TagDAOImpl;
+import com.epam.esm.model.Tag;
 import com.epam.esm.service.GiftTagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,25 +30,29 @@ public class GiftTagServiceImpl implements GiftTagService {
     private LinkTableDAOImpl linkTableDAO;
 
     public void addTagToGiftCertificate(String nameTag, int idGiftCertificate) {
+        Tag tag = new Tag();
         if (tagDAO.readOneTagByName(nameTag) == null) {
-            tagDAO.addTag(nameTag);
+            tag.setName(nameTag);
+            tagDAO.addTag(tag);;
         }
         long id = tagDAO.readOneTagByName(nameTag).getId();
         linkTableDAO.addTagToGiftCertificate(id, idGiftCertificate); //add method for many-to-many
     }
 
-    @Transactional
+    /*@Transactional
     public void addTagToGiftCertificateTransaction(String nameTag, int idGiftCertificate) {
         TransactionStatus status = TransactionAspectSupport.currentTransactionStatus();
         int checkpoint = 0;
+        Tag tag = new Tag();
         Object savepoint = status.createSavepoint();
         if (tagDAO.readOneTagByName(nameTag) == null) {
-            checkpoint = tagDAO.addTag(nameTag);
+            tag.setName(nameTag);
+            checkpoint = tagDAO.addTag(tag);
         }
         int id = tagDAO.readOneTagByName(nameTag).getId();
         linkTableDAO.addTagToGiftCertificate(id, idGiftCertificate); //add method for many-to-many
         if(checkpoint == 0){
             status.rollbackToSavepoint(savepoint);
         }
-    }
+    }*/
 }

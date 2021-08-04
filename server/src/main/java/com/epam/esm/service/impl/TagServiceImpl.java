@@ -3,11 +3,10 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.dao.impl.TagDAOImpl;
 import com.epam.esm.model.Tag;
-import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * The class for realise interface TagService
@@ -15,34 +14,34 @@ import java.util.List;
 @Component
 public class TagServiceImpl {
     private TagDAO tagDAO;
-
-    @Autowired
-    public TagServiceImpl(TagDAO tagDAO) {
-        this.tagDAO = tagDAO;
-    }
+    private TagDAOImpl tagDAOImpl;
 
     public TagServiceImpl() {
-
     }
 
-    public Iterable<Tag> allTags(String sort) {
-        return tagDAO.findAll();
+    @Autowired
+    public TagServiceImpl(TagDAOImpl tagDAOImpl) {
+        this.tagDAOImpl = tagDAOImpl;
+    }
+
+    public Iterable<Tag> allTags() {
+        return tagDAOImpl.allTags();
     }
 
     public void deleteTag(int idTag) {
-         tagDAO.deleteById(idTag);
+        tagDAOImpl.deleteTag(idTag);
     }
 
     public void addTag(Tag tag) {
-        tagDAO.addTag(tag.getName());
+        tagDAOImpl.addTag(tag);
     }
 
     public Tag findByName(String name) {
-        return tagDAO.readOneTagByName(name);
+        return tagDAOImpl.readOneTagByName(name);
     }
 
     public Tag findById(int id) {
-        return tagDAO.readOneTagById(id);
+        return tagDAOImpl.readOneTagById(id);
     }
 
 }
