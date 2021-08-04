@@ -2,15 +2,13 @@ package com.epam.esm.model;
 
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class userOrder {
+@Table(name = "user_order")
+public class UserOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -19,10 +17,10 @@ public class userOrder {
     private double cost;
     private LocalDateTime timeOfPurchase;
 
-    public userOrder() {
+    public UserOrder() {
     }
 
-    public userOrder(int id, int idUser, int idCertificate, double cost, LocalDateTime timeOfPurchase) {
+    public UserOrder(int id, int idUser, int idCertificate, double cost, LocalDateTime timeOfPurchase) {
         this.id = id;
         this.idUser = idUser;
         this.idCertificate = idCertificate;

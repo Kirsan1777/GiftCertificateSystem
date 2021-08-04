@@ -1,41 +1,48 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.query.SqlOrderQuery;
-import com.epam.esm.model.userOrder;
+import com.epam.esm.model.UserOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class OrderDAOImpl {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final EntityManager entityManager;
+
+    private static final String GET_ALL_ORDERS = "SELECT user_order FROM UserOrder user_order";
 
     @Autowired
-    public OrderDAOImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public OrderDAOImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
-    public List<userOrder> allOrders(String sort){
-        return jdbcTemplate.query(SqlOrderQuery.SELECT_ALL_USERS_ORDERS + sort, new BeanPropertyRowMapper<>(userOrder.class));
+    @Transactional
+    public List<UserOrder> allOrders(){
+        return entityManager.createQuery(GET_ALL_ORDERS, UserOrder.class).getResultList();
     }
 
-    public userOrder getOneOrderById(int id){
-        return jdbcTemplate.query(SqlOrderQuery.SELECT_ORDER_BY_ID, new Object[]{id},
-                new BeanPropertyRowMapper<>(userOrder.class)).stream().findAny().orElse(null);
+    @Transactional
+    public UserOrder getOneOrderById(int id){
+        return entityManager.find(UserOrder.class, id);
     }
 
-    public userOrder getMaxUserOrder(int id){
-        return jdbcTemplate.query(SqlOrderQuery.SELECT_ORDER_BY_MAX_COST, new Object[]{id},
-                new BeanPropertyRowMapper<>(userOrder.class)).stream().findAny().orElse(null);
+    @Transactional
+    public Optional<UserOrder> getMaxUserOrder(int id){
+        return allOrders().stream().max(Comparator.comparing(UserOrder::getCost));
     }
 
-    public int addOrder(userOrder order) {
-        return jdbcTemplate.update(SqlOrderQuery.ADD_ORDER, order.getIdUser(), order.getIdCertificate(),
-                order.getCost(), order.getTimeOfPurchase());
+    @Transactional
+    public void addOrder(UserOrder order) {
+        entityManager.persist(order);
     }
 
 }

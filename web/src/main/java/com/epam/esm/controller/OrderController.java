@@ -1,7 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dao.OrderDAO;
-import com.epam.esm.model.userOrder;
+import com.epam.esm.model.UserOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public Iterable<userOrder> addOrder(){
+    public Iterable<UserOrder> addOrder(){
         /*Order order = new Order(1, 1, 1, 100, LocalDateTime.now());
         orderDAO.save(order);
         return "Rabotaet?";*/

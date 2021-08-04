@@ -16,7 +16,7 @@ public interface TagDAO extends CrudRepository<Tag, Integer> {
      *
      * @param sort the param for sort table
      */
-    List<Tag> allTags(String sort);
+    //List<Tag> allTags(String sort);
 
     /**
      * Method for add tag

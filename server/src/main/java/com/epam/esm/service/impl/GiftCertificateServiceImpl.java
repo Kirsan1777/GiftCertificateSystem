@@ -46,8 +46,8 @@ public class GiftCertificateServiceImpl {
         giftCertificateDAO.updateCertificate(giftTest);
     }
 
-    public int updateGiftCertificatePrice(int idGift, double price){
-        return giftCertificateDAO.updateCertificatePrice(idGift, price);
+    public void updateGiftCertificatePrice(int idGift, double price){
+        giftCertificateDAO.updateCertificatePrice(idGift, price);
     }
 
     public GiftCertificate findGiftById(int id){

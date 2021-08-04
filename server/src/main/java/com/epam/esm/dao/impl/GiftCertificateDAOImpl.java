@@ -4,6 +4,7 @@ import com.epam.esm.dao.GiftCertificateDAO;
 import com.epam.esm.dao.HibernateSessionFactoryUtil;
 import com.epam.esm.dao.query.SqlGiftCertificateQuery;
 import com.epam.esm.model.GiftCertificate;
+import com.epam.esm.model.Tag;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,30 +23,57 @@ import java.util.List;
  */
 @Repository
 public class GiftCertificateDAOImpl {
-    private final JdbcTemplate jdbcTemplate;
+
+    private final EntityManager entityManager;
+
+    private static final String GET_ALL_CERTIFICATE = "SELECT gift_certificate FROM GiftCertificate gift_certificate";
+    private static final String UPDATE_PRICE_IN_GIFT_CERTIFICATE = " UPDATE GiftCertificate gift_certificate SET gift_certificate.price = :price, gift_certificate.lastUpdateDate = :lastUpdateDay WHERE gift_certificate.id = :id";
 
     @Autowired
-    public GiftCertificateDAOImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public GiftCertificateDAOImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
-    public List<GiftCertificate> allCertificate(String sort) {
+    @Transactional
+    public List<GiftCertificate> allCertificate() {
+        return entityManager.createQuery(GET_ALL_CERTIFICATE, GiftCertificate.class).getResultList();
+    }
+
+    @Transactional
+    public GiftCertificate readOneGiftById(int id) {
+        return entityManager.find(GiftCertificate.class, id);
+    }
+
+    @Transactional
+    public void save(GiftCertificate giftCertificate) {
+        entityManager.persist(giftCertificate);
+    }
+
+    @Transactional
+    public void deleteById(int idCertificate) {
+        entityManager.remove(entityManager.find(GiftCertificate.class, idCertificate));
+    }
+
+    @Transactional
+    public void updateCertificate(GiftCertificate giftCertificate) {
+        entityManager.persist(giftCertificate);
+    }
+
+    @Transactional
+    public void updateCertificatePrice(int idGift, double price) {
+        entityManager.createQuery(UPDATE_PRICE_IN_GIFT_CERTIFICATE).setParameter("id", idGift).setParameter("price", price)
+                .setParameter("lastUpdateDate", LocalDateTime.now()).executeUpdate();
+    }
+
+
+    /*public List<GiftCertificate> allCertificate(String sort) {
         return jdbcTemplate.query(SqlGiftCertificateQuery.SELECT_ALL_CERTIFICATE + sort, new BeanPropertyRowMapper<>(GiftCertificate.class));
     }
-
-    /*public GiftCertificate readOneGiftById(int id) {
-        return jdbcTemplate.query(SqlGiftCertificateQuery.SELECT_CERTIFICATE_BY_ID, new Object[]{id},
-                new BeanPropertyRowMapper<>(GiftCertificate.class)).stream().findAny().orElse(null);
-    }*/
 
     public GiftCertificate readOneGiftById(int id) {
         return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(GiftCertificate.class, id);
     }
 
-    /*public int addCertificate(GiftCertificate certificate) {
-        return jdbcTemplate.update(SqlGiftCertificateQuery.ADD_CERTIFICATE, certificate.getDescription(), certificate.getPrice(),
-                certificate.getDuration(), certificate.getCreateDate(), certificate.getLastUpdateDate(), certificate.getName());
-    }*/
 
     public void save(GiftCertificate giftCertificate) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
@@ -62,13 +92,6 @@ public class GiftCertificateDAOImpl {
         session.close();
     }
 
-    /*public int updateCertificate(GiftCertificate giftCertificate) {
-        return jdbcTemplate.update(SqlGiftCertificateQuery.UPDATE_CERTIFICATE,
-                giftCertificate.getDescription(), giftCertificate.getPrice(),
-                giftCertificate.getDuration(), giftCertificate.getCreateDate(),
-                giftCertificate.getLastUpdateDate(), giftCertificate.getName(), giftCertificate.getId());
-    }*/
-
     public void updateCertificate(GiftCertificate giftCertificate) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
@@ -80,6 +103,6 @@ public class GiftCertificateDAOImpl {
     public int updateCertificatePrice(int idGift, double price) {
         return jdbcTemplate.update(SqlGiftCertificateQuery.UPDATE_PRICE_CERTIFICATE,
                 price, LocalDateTime.now(), idGift);
-    }
+    }*/
 
 }

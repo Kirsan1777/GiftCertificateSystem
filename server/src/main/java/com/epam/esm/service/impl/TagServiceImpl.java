@@ -13,7 +13,6 @@ import java.util.Optional;
  */
 @Component
 public class TagServiceImpl {
-    private TagDAO tagDAO;
     private TagDAOImpl tagDAOImpl;
 
     public TagServiceImpl() {
