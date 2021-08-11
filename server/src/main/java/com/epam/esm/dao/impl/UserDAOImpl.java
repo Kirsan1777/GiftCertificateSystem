@@ -1,16 +1,14 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.dao.query.SqlUserQuery;
-import com.epam.esm.model.Tag;
 import com.epam.esm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
 
+@Component
 public class UserDAOImpl {
 
     private final EntityManager entityManager;
@@ -36,4 +34,5 @@ public class UserDAOImpl {
     public void addUser(User user) {
         entityManager.persist(user);
     }
+
 }

@@ -2,6 +2,7 @@ package com.epam.esm.controller;
 
 
 import com.epam.esm.dao.impl.LinkTableDAOImpl;
+import com.epam.esm.hateoas.HateoasManager;
 import com.epam.esm.model.GiftCertificate;
 import com.epam.esm.model.GiftTag;
 import com.epam.esm.service.impl.GiftCertificateServiceImpl;
@@ -39,18 +40,20 @@ public class GiftCertificateController {
 
     @GetMapping("/secondPage")
     public Iterable<GiftCertificate> secondPage(){
-        return giftCertificate.allGiftCertificate(ASC);
+        return HateoasManager.addLinksToListGiftCertificate(giftCertificate.allGiftCertificate());
     }
 
     @GetMapping("/{id}")
     public GiftCertificate show(@PathVariable("id") int id) {
-        return giftCertificate.findGiftById(id);
+       return HateoasManager.addLinksToGiftCertificate(giftCertificate.findGiftById(id));
+       // GiftCertificate gift = giftCertificate.findGiftById(id);
+       // return gift;
     }
 
     @PostMapping("/add")
     public Iterable<GiftCertificate> addGift(@ModelAttribute GiftCertificate gift) {
         giftCertificate.addGiftCertificate(gift);
-        return giftCertificate.allGiftCertificate("");
+        return giftCertificate.allGiftCertificate();
     }
 
     @RequestMapping(value = "/addTagToGift", method = RequestMethod.POST)
@@ -62,18 +65,18 @@ public class GiftCertificateController {
     @DeleteMapping("/{id}")
     public Iterable<GiftCertificate> deleteGift(@PathVariable("id") int id) {
         giftCertificate.deleteGiftCertificate(id);
-        return giftCertificate.allGiftCertificate("");
+        return giftCertificate.allGiftCertificate();
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping
     public Iterable<GiftCertificate> updateGift(@ModelAttribute("gift") GiftCertificate gift) {
         giftCertificate.updateGiftCertificate(gift);
-        return giftCertificate.allGiftCertificate("");
+        return giftCertificate.allGiftCertificate();
     }
 
     @PatchMapping("price/{id}")
     public Iterable<GiftCertificate> updateGiftPrice(@ModelAttribute("gift") GiftCertificate gift, @PathVariable("id") int id) {
         giftCertificate.updateGiftCertificatePrice(id, gift.getPrice());
-        return giftCertificate.allGiftCertificate("");
+        return giftCertificate.allGiftCertificate();
     }
 }

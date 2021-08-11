@@ -1,9 +1,10 @@
 package com.epam.esm.model;
 
-import org.springframework.stereotype.Component;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "gift_certificate")
-public class GiftCertificate {
+public class GiftCertificate extends RepresentationModel<GiftCertificate> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -24,12 +25,18 @@ public class GiftCertificate {
     @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
     private String name;
-
+    @ManyToMany
+    @JoinTable(
+            name = "many_to_many",
+            joinColumns = {@JoinColumn(name = "id_certificate")},
+            inverseJoinColumns = {@JoinColumn(name = "id_tag")}
+    )
+    private List<Tag> tags;
     public GiftCertificate(){
 
     }
 
-    public GiftCertificate(int id, String description, double price, int duration, LocalDateTime createDate, LocalDateTime lastUpdateDate, String name) {
+    public GiftCertificate(int id, String description, double price, int duration, LocalDateTime createDate, LocalDateTime lastUpdateDate, String name, List<Tag> tags) {
         this.id = id;
         this.description = description;
         this.price = price;
@@ -37,6 +44,7 @@ public class GiftCertificate {
         this.createDate = createDate;
         this.lastUpdateDate = lastUpdateDate;
         this.name = name;
+        this.tags = tags;
     }
 
 
@@ -96,18 +104,26 @@ public class GiftCertificate {
         this.name = name;
     }
 
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         GiftCertificate that = (GiftCertificate) o;
-        return id == that.id && Double.compare(that.price, price) == 0 && duration == that.duration && Objects.equals(description, that.description) && Objects.equals(createDate, that.createDate) && Objects.equals(lastUpdateDate, that.lastUpdateDate) && Objects.equals(name, that.name);
+        return id == that.id && Double.compare(that.price, price) == 0 && duration == that.duration && Objects.equals(description, that.description) && Objects.equals(createDate, that.createDate) && Objects.equals(lastUpdateDate, that.lastUpdateDate) && Objects.equals(name, that.name) && Objects.equals(tags, that.tags);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, price, duration, createDate, lastUpdateDate, name);
+        return Objects.hash(super.hashCode(), id, description, price, duration, createDate, lastUpdateDate, name, tags);
     }
 
     @Override
@@ -117,9 +133,10 @@ public class GiftCertificate {
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", duration=" + duration +
-                ", createDate='" + createDate + '\'' +
-                ", lastUpdateDate='" + lastUpdateDate + '\'' +
+                ", createDate=" + createDate +
+                ", lastUpdateDate=" + lastUpdateDate +
                 ", name='" + name + '\'' +
+                ", tags=" + tags +
                 '}';
     }
 }

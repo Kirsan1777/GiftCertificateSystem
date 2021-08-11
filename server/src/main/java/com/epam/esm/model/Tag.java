@@ -1,8 +1,10 @@
 package com.epam.esm.model;
 
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -10,11 +12,13 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "tag")
-public class Tag {
+public class Tag extends RepresentationModel<Tag> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+    @ManyToMany(mappedBy = "tags")
+    private List<GiftCertificate> giftCertificateList;
 
     public Tag(){
 
@@ -40,17 +44,26 @@ public class Tag {
         this.name = name;
     }
 
+   /* public List<GiftCertificate> getGiftCertificateList() {
+        return giftCertificateList;
+    }
+
+    public void setGiftCertificateList(List<GiftCertificate> giftCertificateList) {
+        this.giftCertificateList = giftCertificateList;
+    }*/
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Tag tag = (Tag) o;
-        return id == tag.id && Objects.equals(name, tag.name);
+        return id == tag.id && Objects.equals(name, tag.name)/* && Objects.equals(giftCertificateList, tag.giftCertificateList)*/;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(super.hashCode(), id, name/*, giftCertificateList*/);
     }
 
     @Override
@@ -58,7 +71,7 @@ public class Tag {
         return "Tag{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", giftCertificateList="/* + giftCertificateList */+
                 '}';
     }
-
 }

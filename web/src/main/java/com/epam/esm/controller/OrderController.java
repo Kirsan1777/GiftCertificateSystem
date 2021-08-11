@@ -1,7 +1,9 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dao.OrderDAO;
+import com.epam.esm.model.Tag;
 import com.epam.esm.model.UserOrder;
+import com.epam.esm.service.impl.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
@@ -11,21 +13,29 @@ import org.springframework.web.bind.annotation.*;
 @EnableAutoConfiguration
 public class OrderController {
 
-    @Autowired
-    private OrderDAO orderDAO;
+    private OrderServiceImpl orderService;
 
     public OrderController() {
     }
 
-    public OrderController(OrderDAO orderDAO) {
-        this.orderDAO = orderDAO;
+    @Autowired
+    public OrderController(OrderServiceImpl orderService) {
+        this.orderService = orderService;
     }
 
-    @GetMapping
-    public Iterable<UserOrder> addOrder(){
-        /*Order order = new Order(1, 1, 1, 100, LocalDateTime.now());
-        orderDAO.save(order);
-        return "Rabotaet?";*/
-        return orderDAO.findAll();
+    @PostMapping("/add")
+    public Iterable<UserOrder> addOrder(@ModelAttribute("order") UserOrder order){
+        orderService.addOrder(order);
+        return orderService.allOrders();
+    }
+
+    @GetMapping("/allOrders")
+    public Iterable<UserOrder> showOrder(){
+        return orderService.allOrders();
+    }
+
+    @GetMapping("/allUserOrders/{id}")
+    public Iterable<UserOrder> allUserOrders(@PathVariable("id") int id){
+        return orderService.allUserOrders(id);
     }
 }

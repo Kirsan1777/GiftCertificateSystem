@@ -30,7 +30,7 @@ public class GiftTagController {
     }
 
     @GetMapping("/thirdPage")
-    public List<GiftTag> thirdPage() {
+    public List<GiftTag> concatenatedTables() {
         return linkTableDAO.getConcatenatedTables("");
     }
 
@@ -47,13 +47,11 @@ public class GiftTagController {
     @GetMapping("/sortTagNameAsc")
     public List<GiftTag> sortByTagNameASC() {
         return linkTableDAO.getConcatenatedTables(" ORDER BY t.name ASC");
-
     }
 
     @GetMapping("/sortTagNameDesc")
     public List<GiftTag> sortByTagNameDESC() {
         return linkTableDAO.getConcatenatedTables(" ORDER BY t.name DESC");
-
     }
 
     @GetMapping("/findByAllParam")

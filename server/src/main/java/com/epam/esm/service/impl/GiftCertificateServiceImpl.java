@@ -35,15 +35,15 @@ public class GiftCertificateServiceImpl {
         giftCertificateDAO.deleteById(id);
     }
 
-    public Iterable<GiftCertificate> allGiftCertificate(String sort){
-        return giftCertificate.findAll();
+    public Iterable<GiftCertificate> allGiftCertificate(){
+        return giftCertificateDAO.allCertificate();
     }
 
     public void updateGiftCertificate(GiftCertificate gift){
         gift.setLastUpdateDate(LocalDateTime.now());
-        GiftCertificate giftTest = new GiftCertificate
-                (1, "1", 1, 1, LocalDateTime.now(), LocalDateTime.now(), "TestHibernate");
-        giftCertificateDAO.updateCertificate(giftTest);
+        //GiftCertificate giftTest = new GiftCertificate
+        //        (1, "1", 1, 1, LocalDateTime.now(), LocalDateTime.now(), "TestHibernate");
+        giftCertificateDAO.updateCertificate(gift);
     }
 
     public void updateGiftCertificatePrice(int idGift, double price){

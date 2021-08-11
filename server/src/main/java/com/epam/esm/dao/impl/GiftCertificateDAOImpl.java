@@ -1,16 +1,7 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.dao.GiftCertificateDAO;
-import com.epam.esm.dao.HibernateSessionFactoryUtil;
-import com.epam.esm.dao.query.SqlGiftCertificateQuery;
 import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.model.Tag;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -37,11 +28,15 @@ public class GiftCertificateDAOImpl {
     @Transactional
     public List<GiftCertificate> allCertificate() {
         return entityManager.createQuery(GET_ALL_CERTIFICATE, GiftCertificate.class).getResultList();
+        //List<GiftCertificate> giftCertificateList =  entityManager.createQuery(GET_ALL_CERTIFICATE, GiftCertificate.class).getResultList();
+        //return giftCertificateList;
     }
 
     @Transactional
     public GiftCertificate readOneGiftById(int id) {
         return entityManager.find(GiftCertificate.class, id);
+        //GiftCertificate giftCertificate = entityManager.find(GiftCertificate.class, id);
+        //return giftCertificate;
     }
 
     @Transactional

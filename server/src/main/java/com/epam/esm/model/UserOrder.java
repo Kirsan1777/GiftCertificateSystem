@@ -1,5 +1,6 @@
 package com.epam.esm.model;
 
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -8,13 +9,17 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "user_order")
-public class UserOrder {
+public class UserOrder extends RepresentationModel<UserOrder> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(columnDefinition = "id_user")
     private int idUser;
+    @Column(columnDefinition = "id_certificate")
     private int idCertificate;
+    @Column(columnDefinition = "cost")
     private double cost;
+    @Column(columnDefinition = "time_of_purchase")
     private LocalDateTime timeOfPurchase;
 
     public UserOrder() {

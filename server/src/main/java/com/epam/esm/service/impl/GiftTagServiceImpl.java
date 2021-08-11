@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.impl.LinkTableDAOImpl;
 import com.epam.esm.dao.impl.TagDAOImpl;
+import com.epam.esm.model.GiftTag;
 import com.epam.esm.model.Tag;
 import com.epam.esm.service.GiftTagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.support.TransactionTemplate;
+
+import java.util.List;
 
 /**
  * The class for realise interface GiftTagService
@@ -37,6 +40,10 @@ public class GiftTagServiceImpl implements GiftTagService {
         }
         long id = tagDAO.readOneTagByName(nameTag).getId();
         linkTableDAO.addTagToGiftCertificate(id, idGiftCertificate); //add method for many-to-many
+    }
+
+    public List<GiftTag> getConcatenatedTablesByIdGiftCertificate(int idCertificate){
+        return linkTableDAO.getConcatenatedTablesByIdGiftCertificate(idCertificate);
     }
 
     /*@Transactional
