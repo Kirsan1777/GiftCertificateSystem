@@ -1,5 +1,6 @@
 package com.epam.esm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,8 @@ public class Tag extends RepresentationModel<Tag> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<GiftCertificate> giftCertificateList;
 
     public Tag(){
@@ -43,14 +45,6 @@ public class Tag extends RepresentationModel<Tag> {
     public void setName(String name) {
         this.name = name;
     }
-
-   /* public List<GiftCertificate> getGiftCertificateList() {
-        return giftCertificateList;
-    }
-
-    public void setGiftCertificateList(List<GiftCertificate> giftCertificateList) {
-        this.giftCertificateList = giftCertificateList;
-    }*/
 
     @Override
     public boolean equals(Object o) {

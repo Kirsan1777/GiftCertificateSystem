@@ -29,9 +29,7 @@ public class UserServiceImpl {
         this.giftTagService = giftTagService;
     }
 
-
-
-    public List<GiftTag> getTheMostExpensiveTag(int id){
+    public List<Tag> getTheMostExpensiveTag(int id){
         List<UserOrder> orders = (List<UserOrder>) orderDAO.getTheMostWidelyUsedTagOfAUserWithTheHighestCost(id);
         Map<Integer, Integer> tags = new HashMap<>();
         orders.stream().forEach(order -> {
@@ -46,7 +44,7 @@ public class UserServiceImpl {
                 .max(Comparator.comparing(Map.Entry::getValue));
         int idCertificate = maxEntry.get().getKey();
         GiftCertificate giftCertificate = giftCertificateService.findGiftById(idCertificate);
-        return giftTagService.getConcatenatedTablesByIdGiftCertificate(giftCertificate.getId());
+        return giftCertificate.getTags();
     }
 
 }

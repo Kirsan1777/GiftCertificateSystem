@@ -5,12 +5,15 @@ import com.epam.esm.controller.GiftTagController;
 import com.epam.esm.controller.TagController;
 import com.epam.esm.controller.UserController;
 import com.epam.esm.model.*;
+import com.epam.esm.service.impl.TagServiceImpl;
+import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.LinkBuilder;
 import org.springframework.hateoas.server.core.LinkBuilderSupport;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -27,7 +30,12 @@ public class HateoasManager<T> {
         return PagedModel.of(entities, pageMetadata).getContent();
     }
 
-    public static Iterable<Tag> addLinksToTag(Iterable<Tag> tags){
+    public static Tag addLinksToTag(Tag tag){
+        tag.add(linkTo(methodOn(TagController.class).delete(tag.getId())).withRel("delete"));
+        return tag;
+    }
+
+    public static Iterable<Tag> addLinksToTags(Iterable<Tag> tags){
         for (Tag tag : tags) {
             tag.add(linkTo(methodOn(TagController.class).delete(tag.getId())).withRel("delete"));
             tag.add(linkTo(methodOn(TagController.class).show(tag.getId())).withRel("show"));
@@ -35,30 +43,31 @@ public class HateoasManager<T> {
         return tags;
     }
 
+
+
     public static GiftCertificate addLinksToGiftCertificate(GiftCertificate giftCertificate){
         giftCertificate.add(linkTo(methodOn(GiftCertificateController.class).deleteGift(giftCertificate.getId())).withRel("delete"));
         giftCertificate.add(linkTo(methodOn(GiftCertificateController.class).updateGift(giftCertificate)).withRel("update"));
-        addLinksToListTags(giftCertificate.getTags());
+        for(Tag tag : giftCertificate.getTags()){
+                tag.add(linkTo(methodOn(TagController.class).show(tag.getId())).withSelfRel());
+        }
         return giftCertificate;
     }
 
-    public static Iterable<GiftCertificate> addLinksToListGiftCertificate(Iterable<GiftCertificate> giftCertificateList){
-        List<Tag> checkTags = new ArrayList<>();
+    public static Collection<GiftCertificate> addLinksToListGiftCertificate(Collection<GiftCertificate> giftCertificateList){
         for(GiftCertificate giftCertificate : giftCertificateList) {
             giftCertificate.add(linkTo(methodOn(GiftCertificateController.class).deleteGift(giftCertificate.getId())).withRel("delete"));
             giftCertificate.add(linkTo(methodOn(GiftCertificateController.class).updateGift(giftCertificate)).withRel("update"));
-            for(Tag tag : giftCertificate.getTags()){
-                if(!checkTags.contains(tag)){
-                    tag.add(linkTo(methodOn(TagController.class).show(tag.getId())).withSelfRel());
-                    checkTags.add(tag);
+                for (Tag tag : giftCertificate.getTags()) {
+                    if (!tag.hasLinks()) {
+                        tag.add(linkTo(methodOn(TagController.class).show(tag.getId())).withSelfRel());
+                    }
                 }
-            }
         }
         return giftCertificateList;
     }
 
     public static void addLinksToListTags(List<Tag> tagsList){
-
     }
 
     /*public static UserOrder addLinksToOrder(UserOrder order) {

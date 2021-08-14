@@ -20,8 +20,6 @@ import java.util.List;
 @EnableAutoConfiguration
 public class GiftTagController {
 
-    private static final String THIRD_PAGE = "many/thirdPage";
-
     @Autowired
     private final LinkTableDAOImpl linkTableDAO;
 
@@ -29,7 +27,7 @@ public class GiftTagController {
         this.linkTableDAO = linkTableDAO;
     }
 
-    @GetMapping("/thirdPage")
+    @GetMapping("/concatenated-tables")
     public List<GiftTag> concatenatedTables() {
         return linkTableDAO.getConcatenatedTables("");
     }
@@ -70,7 +68,7 @@ public class GiftTagController {
         if (nameGift != null && chooseType != null && !nameGift.equals("") && !chooseType.equals("")) {
             if (count > 0) {
                 stringBuffer.append(" AND ");
-            }else{
+            } else {
                 stringBuffer.append(" WHERE ");
             }
             stringBuffer.append(chooseType).append(" LIKE '%").append(nameGift).append("%'");

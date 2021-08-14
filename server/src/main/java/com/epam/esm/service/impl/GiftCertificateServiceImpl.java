@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,14 +37,13 @@ public class GiftCertificateServiceImpl {
         giftCertificateDAO.deleteById(id);
     }
 
-    public Iterable<GiftCertificate> allGiftCertificate(){
+    public Collection<GiftCertificate> allGiftCertificate(){
         return giftCertificateDAO.allCertificate();
     }
 
     public void updateGiftCertificate(GiftCertificate gift){
+        gift.setCreateDate(giftCertificateDAO.readOneGiftById(gift.getId()).getCreateDate());
         gift.setLastUpdateDate(LocalDateTime.now());
-        //GiftCertificate giftTest = new GiftCertificate
-        //        (1, "1", 1, 1, LocalDateTime.now(), LocalDateTime.now(), "TestHibernate");
         giftCertificateDAO.updateCertificate(gift);
     }
 
@@ -52,5 +53,9 @@ public class GiftCertificateServiceImpl {
 
     public GiftCertificate findGiftById(int id){
         return giftCertificateDAO.readOneGiftById(id);
+    }
+
+    public List<GiftCertificate> allGiftCertificateByTags(List<String> tagsName){
+        return giftCertificateDAO.allGiftCertificateByTags(tagsName);
     }
 }

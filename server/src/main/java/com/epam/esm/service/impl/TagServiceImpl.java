@@ -24,10 +24,6 @@ public class TagServiceImpl {
         this.tagDAOImpl = tagDAOImpl;
     }
 
-    public Iterable<Tag> allTags() {
-        return tagDAOImpl.allTags();
-    }
-
     public List<Tag> viewAll(int page, int size) {
         return tagDAOImpl.viewAll(page, size);
     }
@@ -52,9 +48,7 @@ public class TagServiceImpl {
         return tagDAOImpl.getCountOfEntities();
     }
 
-
     /*public Page<Tag> allTags(Pageable pageable) {
         return tagDAOImpl.viewTag(pageable);
     }*/
-
 }

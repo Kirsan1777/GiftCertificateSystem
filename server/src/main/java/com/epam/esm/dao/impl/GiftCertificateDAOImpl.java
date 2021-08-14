@@ -18,7 +18,10 @@ public class GiftCertificateDAOImpl {
     private final EntityManager entityManager;
 
     private static final String GET_ALL_CERTIFICATE = "SELECT gift_certificate FROM GiftCertificate gift_certificate";
-    private static final String UPDATE_PRICE_IN_GIFT_CERTIFICATE = " UPDATE GiftCertificate gift_certificate SET gift_certificate.price = :price, gift_certificate.lastUpdateDate = :lastUpdateDay WHERE gift_certificate.id = :id";
+    private static final String UPDATE_PRICE_IN_GIFT_CERTIFICATE = " UPDATE GiftCertificate gift_certificate SET gift_certificate.price = :price, gift_certificate.lastUpdateDate = :lastUpdateDate WHERE gift_certificate.id = :id";
+    private static final String UPDATE_GIFT_CERTIFICATE = " UPDATE GiftCertificate gift_certificate SET gift_certificate.description = :description, gift_certificate.duration = :duration, gift_certificate.name = :name, gift_certificate.price = :price, gift_certificate.createDate = :create_date, gift_certificate.lastUpdateDate = :lastUpdateDate WHERE gift_certificate.id = :id";
+    private static final String FIND_GIFT_CERTIFICATE_BY_TAGS = "SELECT * from gift_certificate where id in (SELECT gift_certificate.id FROM gift_certificate  JOIN many_to_many mtm on gift_certificate.id = mtm.id_certificate JOIN tag t on t.id = mtm.id_tag where t.name = ";
+    private static final String ADD_TAG_TO_QUERY = " AND gift_certificate.id in (SELECT gift_certificate.id FROM gift_certificate  JOIN many_to_many mtm on gift_certificate.id = mtm.id_certificate JOIN tag t on t.id = mtm.id_tag where t.name = ";
 
     @Autowired
     public GiftCertificateDAOImpl(EntityManager entityManager) {
@@ -28,15 +31,28 @@ public class GiftCertificateDAOImpl {
     @Transactional
     public List<GiftCertificate> allCertificate() {
         return entityManager.createQuery(GET_ALL_CERTIFICATE, GiftCertificate.class).getResultList();
-        //List<GiftCertificate> giftCertificateList =  entityManager.createQuery(GET_ALL_CERTIFICATE, GiftCertificate.class).getResultList();
-        //return giftCertificateList;
     }
 
     @Transactional
     public GiftCertificate readOneGiftById(int id) {
         return entityManager.find(GiftCertificate.class, id);
-        //GiftCertificate giftCertificate = entityManager.find(GiftCertificate.class, id);
-        //return giftCertificate;
+    }
+
+    @Transactional
+    public List<GiftCertificate> allGiftCertificateByTags(List<String> tagsName){
+     String sqlQuery = FIND_GIFT_CERTIFICATE_BY_TAGS;
+        if(tagsName.size()>1){
+            sqlQuery = sqlQuery.concat("'"+tagsName.get(0)+"'");
+            for(int i = 1; i<tagsName.size(); i++){
+                sqlQuery = sqlQuery.concat(ADD_TAG_TO_QUERY).concat("'"+tagsName.get(i)+"'");
+            }
+            for (int i = 0; i<tagsName.size(); i++){
+                sqlQuery = sqlQuery.concat(")");
+            }
+        } else {
+            sqlQuery = sqlQuery.concat("'"+tagsName.get(0)+"'").concat(")");
+        }
+        return entityManager.createNativeQuery(sqlQuery, GiftCertificate.class).getResultList();
     }
 
     @Transactional
@@ -51,7 +67,10 @@ public class GiftCertificateDAOImpl {
 
     @Transactional
     public void updateCertificate(GiftCertificate giftCertificate) {
-        entityManager.persist(giftCertificate);
+        entityManager.createQuery(UPDATE_GIFT_CERTIFICATE).setParameter("id", giftCertificate.getId()).setParameter("price", giftCertificate.getPrice())
+                .setParameter("create_date", giftCertificate.getCreateDate()).setParameter("duration", giftCertificate.getDuration())
+                .setParameter("description", giftCertificate.getDescription()).setParameter("name", giftCertificate.getName())
+                .setParameter("lastUpdateDate", LocalDateTime.now()).executeUpdate();
     }
 
     @Transactional
@@ -59,45 +78,5 @@ public class GiftCertificateDAOImpl {
         entityManager.createQuery(UPDATE_PRICE_IN_GIFT_CERTIFICATE).setParameter("id", idGift).setParameter("price", price)
                 .setParameter("lastUpdateDate", LocalDateTime.now()).executeUpdate();
     }
-
-
-    /*public List<GiftCertificate> allCertificate(String sort) {
-        return jdbcTemplate.query(SqlGiftCertificateQuery.SELECT_ALL_CERTIFICATE + sort, new BeanPropertyRowMapper<>(GiftCertificate.class));
-    }
-
-    public GiftCertificate readOneGiftById(int id) {
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(GiftCertificate.class, id);
-    }
-
-
-    public void save(GiftCertificate giftCertificate) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(giftCertificate);
-        transaction.commit();
-        session.close();
-    }
-
-    public void deleteById(int idCertificate) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        GiftCertificate giftCertificate = session.get(GiftCertificate.class, idCertificate);
-        session.delete(giftCertificate);
-        transaction.commit();
-        session.close();
-    }
-
-    public void updateCertificate(GiftCertificate giftCertificate) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.update(giftCertificate);
-        transaction.commit();
-        session.close();
-    }
-
-    public int updateCertificatePrice(int idGift, double price) {
-        return jdbcTemplate.update(SqlGiftCertificateQuery.UPDATE_PRICE_CERTIFICATE,
-                price, LocalDateTime.now(), idGift);
-    }*/
 
 }

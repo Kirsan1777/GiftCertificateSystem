@@ -1,5 +1,6 @@
 package com.epam.esm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
@@ -20,9 +21,7 @@ public class GiftCertificate extends RepresentationModel<GiftCertificate> {
     @Column(name = "price")
     private double price;
     private int duration;
-    @Column(name = "create_date")
     private LocalDateTime createDate;
-    @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
     private String name;
     @ManyToMany
@@ -32,8 +31,8 @@ public class GiftCertificate extends RepresentationModel<GiftCertificate> {
             inverseJoinColumns = {@JoinColumn(name = "id_tag")}
     )
     private List<Tag> tags;
-    public GiftCertificate(){
 
+    public GiftCertificate(){
     }
 
     public GiftCertificate(int id, String description, double price, int duration, LocalDateTime createDate, LocalDateTime lastUpdateDate, String name, List<Tag> tags) {

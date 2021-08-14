@@ -28,18 +28,6 @@ public class TagDAOImpl{
     }
 
     @Transactional
-    public List<Tag> allTags( ){
-        //return entityManager.createQuery(GET_ALL_TAGS, Tag.class).getResultList();
-        CriteriaQuery<Tag> criteriaQuery = entityManager.getCriteriaBuilder().createQuery(Tag.class);
-        Root<Tag> root = criteriaQuery.from(Tag.class);
-        criteriaQuery.select(root);
-        return entityManager.createQuery(criteriaQuery)
-                .setFirstResult(0)
-                .setMaxResults(100)
-                .getResultList();
-    }
-
-    @Transactional
     public List<Tag> viewAll(int page, int size){
         CriteriaQuery<Tag> criteriaQuery = entityManager.getCriteriaBuilder().createQuery(Tag.class);
         Root<Tag> root = criteriaQuery.from(Tag.class);
