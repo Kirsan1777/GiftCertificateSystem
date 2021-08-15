@@ -8,9 +8,11 @@ import com.epam.esm.service.impl.GiftCertificateServiceImpl;
 import com.epam.esm.service.impl.GiftTagServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.Collection;
 import java.util.List;
@@ -78,5 +80,13 @@ public class GiftCertificateController extends HateoasManager<GiftCertificate> {
         giftCertificate.updateGiftCertificatePrice(id, gift.getPrice());
         return HateoasManager.addLinksToListGiftCertificate(giftCertificate.allGiftCertificate());
     }
+
+    @ExceptionHandler({ Exception.class })
+    public ResponseEntity<Object> handleAccessDeniedException(
+            Exception ex, WebRequest request) {
+        return new ResponseEntity<Object>(
+                "Mistake in gift certificate controller \nexception : " + ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN);
+    }
+
 
 }

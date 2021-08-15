@@ -6,6 +6,7 @@ import com.epam.esm.controller.TagController;
 import com.epam.esm.controller.UserController;
 import com.epam.esm.model.*;
 import com.epam.esm.service.impl.TagServiceImpl;
+import org.hibernate.criterion.Order;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.LinkBuilder;
@@ -43,8 +44,6 @@ public class HateoasManager<T> {
         return tags;
     }
 
-
-
     public static GiftCertificate addLinksToGiftCertificate(GiftCertificate giftCertificate){
         giftCertificate.add(linkTo(methodOn(GiftCertificateController.class).deleteGift(giftCertificate.getId())).withRel("delete"));
         giftCertificate.add(linkTo(methodOn(GiftCertificateController.class).updateGift(giftCertificate)).withRel("update"));
@@ -67,7 +66,19 @@ public class HateoasManager<T> {
         return giftCertificateList;
     }
 
-    public static void addLinksToListTags(List<Tag> tagsList){
+    public static void addLinksToListUsers(List<User> users){
+    }
+
+    public static void addLinksToUser(User user){
+
+    }
+
+    public static void addLinksToListOrder(List<UserOrder> orders){
+
+    }
+
+    public static void addLinkToOrder(Order order){
+
     }
 
     /*public static UserOrder addLinksToOrder(UserOrder order) {

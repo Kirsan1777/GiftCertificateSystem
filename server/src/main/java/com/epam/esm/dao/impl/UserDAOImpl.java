@@ -21,7 +21,7 @@ public class UserDAOImpl {
     }
 
     @Transactional
-    public List<User> allUsers(String sort){
+    public List<User> allUsers(){
         return entityManager.createQuery(GET_ALL_USERS, User.class).getResultList();
     }
 

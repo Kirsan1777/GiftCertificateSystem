@@ -36,7 +36,7 @@ public class OrderServiceImpl {
         orderDAO.addOrder(order);
     }
 
-    public UserOrder findById(int id) {
+    public UserOrder findOrderById(int id) {
         return orderDAO.getOneOrderById(id);
     }
 

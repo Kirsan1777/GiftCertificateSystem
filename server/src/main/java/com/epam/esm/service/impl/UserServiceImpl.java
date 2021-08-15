@@ -2,13 +2,11 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.impl.OrderDAOImpl;
 import com.epam.esm.dao.impl.UserDAOImpl;
-import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.model.GiftTag;
-import com.epam.esm.model.Tag;
-import com.epam.esm.model.UserOrder;
+import com.epam.esm.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
@@ -16,17 +14,27 @@ public class UserServiceImpl {
     private final UserDAOImpl userDAO;
     private final OrderDAOImpl orderDAO;
     private final GiftCertificateServiceImpl giftCertificateService;
-    private final GiftTagServiceImpl giftTagService;
 
     /*public UserServiceImpl() {
         mb this constructor will be use later
     }*/
     @Autowired
-    public UserServiceImpl(UserDAOImpl userDAO, OrderDAOImpl orderDAO, GiftCertificateServiceImpl giftCertificateService, GiftTagServiceImpl giftTagService) {
+    public UserServiceImpl(UserDAOImpl userDAO, OrderDAOImpl orderDAO, GiftCertificateServiceImpl giftCertificateService) {
         this.userDAO = userDAO;
         this.orderDAO = orderDAO;
         this.giftCertificateService = giftCertificateService;
-        this.giftTagService = giftTagService;
+    }
+
+    public void addUser(User user){
+        userDAO.addUser(user);
+    }
+
+    public List<User> getAllUsers(){
+        return userDAO.allUsers();
+    }
+
+    public User getUserById(int idUser){
+        return userDAO.getOneUserById(idUser);
     }
 
     public List<Tag> getTheMostExpensiveTag(int id){

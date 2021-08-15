@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 @Component
 public class GiftTagMapper implements RowMapper<GiftTag> {
+
     @Override
     public GiftTag mapRow(ResultSet resultSet, int i) throws SQLException {
         GiftTag giftTag = new GiftTag();
@@ -21,4 +22,5 @@ public class GiftTagMapper implements RowMapper<GiftTag> {
         giftTag.setDescription(resultSet.getString("c.description"));
         return giftTag;
     }
+
 }
