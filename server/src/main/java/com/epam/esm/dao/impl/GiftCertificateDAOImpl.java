@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,8 +31,14 @@ public class GiftCertificateDAOImpl {
     }
 
     @Transactional
-    public List<GiftCertificate> allCertificate() {
-        return entityManager.createQuery(GET_ALL_CERTIFICATE, GiftCertificate.class).getResultList();
+    public List<GiftCertificate> allCertificate(int page, int size) {
+        CriteriaQuery<GiftCertificate> criteriaQuery = entityManager.getCriteriaBuilder().createQuery(GiftCertificate.class);
+        Root<GiftCertificate> root = criteriaQuery.from(GiftCertificate.class);
+        criteriaQuery.select(root);
+        return entityManager.createQuery(criteriaQuery)
+                .setFirstResult((page - 1) * size)
+                .setMaxResults(size)
+                .getResultList();
     }
 
     @Transactional

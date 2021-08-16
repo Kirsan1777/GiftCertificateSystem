@@ -1,7 +1,5 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.error.ErrorCode;
-import com.epam.esm.error.ErrorHandler;
 import com.epam.esm.hateoas.HateoasManager;
 import com.epam.esm.model.Tag;
 import com.epam.esm.model.User;
@@ -21,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @EnableAutoConfiguration
-public class UserController extends HateoasManager<UserOrder> {
+public class UserController extends HateoasManager<User> {
 
     private OrderServiceImpl orderService;
     private UserServiceImpl userService;
@@ -32,9 +30,10 @@ public class UserController extends HateoasManager<UserOrder> {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public List<User> getAllUsers(){
-        return userService.getAllUsers();
+    @GetMapping("/all-users")
+    public List<User> getAllUsers(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                  @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
+        return userService.getAllUsers(page, size);
     }
 
     @GetMapping("/{id}")
@@ -43,48 +42,50 @@ public class UserController extends HateoasManager<UserOrder> {
     }
 
     @PostMapping("/add-user")
-    public ResponseEntity<Object> addUser(@RequestBody User user){
+    public ResponseEntity<Object> addUser(@RequestBody User user) {
         userService.addUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/add-order")//how to bought order?
-    public Iterable<UserOrder> addOrder(@RequestBody UserOrder order) {
+    @PostMapping("/add-order/{idUser}")
+    public ResponseEntity<Object> addOrder(@RequestBody UserOrder order, @PathVariable("idUser") int idUser) {
+        order.setIdUser(idUser);
         orderService.addOrder(order);
-        return orderService.allOrders();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/all-orders")
-    public Iterable<UserOrder> showOrders() {
-        return orderService.allOrders();
+    public Iterable<UserOrder> showOrders(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                          @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
+        return HateoasManager.addLinksToListOrder(orderService.allOrders(page, size));
     }
 
     @GetMapping("/order-by-id/{idOrder}")
-    public UserOrder findOrderById(@PathVariable("idOrder") int idOrder){
-        return orderService.findOrderById(idOrder);
+    public UserOrder findOrderById(@PathVariable("idOrder") int idOrder) {
+        return HateoasManager.addLinkToOrder(orderService.findOrderById(idOrder));
     }
 
     @GetMapping("/all-user-orders/{id}")
     public Iterable<UserOrder> allUserOrders(@PathVariable("id") int id) {
-        return orderService.allUserOrders(id);
+        return HateoasManager.addLinksToListOrder(orderService.allUserOrders(id));
     }
 
     @GetMapping("/most-used-tag/{id}")
-    public List<Tag> mostExpensiveTag(@PathVariable("id") int idUser) {
-        return userService.getTheMostExpensiveTag(idUser);
+    public Iterable<Tag> mostExpensiveTag(@PathVariable("id") int idUser) {
+        return HateoasManager.addLinksToTags(userService.getTheMostExpensiveTag(idUser));
     }
 
     @DeleteMapping("/{idOrder}")
-    public ResponseEntity<Object> deleteOrder(@PathVariable("idOrder") int idOrder){
+    public ResponseEntity<Object> deleteOrder(@PathVariable("idOrder") int idOrder) {
         orderService.deleteOrder(idOrder);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ExceptionHandler({ Exception.class })
+    @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleAccessDeniedException(
             Exception ex, WebRequest request) {
-        return new ResponseEntity<Object>(
-                "Mistake in user controller \nexception : " + ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(
+                "Exception in user controller \nexception : " + ex.getMessage() + "\n" + HttpStatus.FORBIDDEN, new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
 
 }

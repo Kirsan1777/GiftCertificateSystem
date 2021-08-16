@@ -5,8 +5,6 @@ import com.epam.esm.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
-import java.awt.print.Pageable;
 import java.util.List;
 
 /**
@@ -48,7 +46,4 @@ public class TagServiceImpl {
         return tagDAOImpl.getCountOfEntities();
     }
 
-    /*public Page<Tag> allTags(Pageable pageable) {
-        return tagDAOImpl.viewTag(pageable);
-    }*/
 }

@@ -85,7 +85,7 @@ public class GiftTagController {
     public ResponseEntity<Object> handleAccessDeniedException(
             Exception ex, WebRequest request) {
         return new ResponseEntity<Object>(
-                "Mistake gift tag controller \nexception : " + ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN);
+                "Mistake gift tag controller \nexception : " + ex.getMessage() + "\n" + HttpStatus.FORBIDDEN, new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
 
 }

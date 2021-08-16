@@ -20,14 +20,10 @@ import java.util.List;
  * The class for realise interface GiftTagService
  */
 @Component
-public class GiftTagServiceImpl implements GiftTagService {
+public class GiftTagServiceImpl {
     @Autowired
     private TagDAOImpl tagDAO;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    private TransactionTemplate template;
 
     @Autowired
     private LinkTableDAOImpl linkTableDAO;
@@ -46,20 +42,4 @@ public class GiftTagServiceImpl implements GiftTagService {
         return linkTableDAO.getConcatenatedTablesByIdGiftCertificate(idCertificate);
     }
 
-    /*@Transactional
-    public void addTagToGiftCertificateTransaction(String nameTag, int idGiftCertificate) {
-        TransactionStatus status = TransactionAspectSupport.currentTransactionStatus();
-        int checkpoint = 0;
-        Tag tag = new Tag();
-        Object savepoint = status.createSavepoint();
-        if (tagDAO.readOneTagByName(nameTag) == null) {
-            tag.setName(nameTag);
-            checkpoint = tagDAO.addTag(tag);
-        }
-        int id = tagDAO.readOneTagByName(nameTag).getId();
-        linkTableDAO.addTagToGiftCertificate(id, idGiftCertificate); //add method for many-to-many
-        if(checkpoint == 0){
-            status.rollbackToSavepoint(savepoint);
-        }
-    }*/
 }

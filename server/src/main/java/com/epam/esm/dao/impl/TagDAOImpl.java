@@ -19,7 +19,6 @@ public class TagDAOImpl{
 
     private final EntityManager entityManager;
 
-    private static final String GET_ALL_TAGS = "SELECT tag FROM Tag tag";
     private static final String GET_TAG_BY_NAME = "SELECT tag FROM Tag tag WHERE tag.name = :name";
 
     @Autowired
@@ -33,7 +32,7 @@ public class TagDAOImpl{
         Root<Tag> root = criteriaQuery.from(Tag.class);
         criteriaQuery.select(root);
         return entityManager.createQuery(criteriaQuery)
-                .setFirstResult(page)
+                .setFirstResult((page - 1) * size)
                 .setMaxResults(size)
                 .getResultList();
     }

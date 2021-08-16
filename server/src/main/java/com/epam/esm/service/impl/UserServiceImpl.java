@@ -15,9 +15,6 @@ public class UserServiceImpl {
     private final OrderDAOImpl orderDAO;
     private final GiftCertificateServiceImpl giftCertificateService;
 
-    /*public UserServiceImpl() {
-        mb this constructor will be use later
-    }*/
     @Autowired
     public UserServiceImpl(UserDAOImpl userDAO, OrderDAOImpl orderDAO, GiftCertificateServiceImpl giftCertificateService) {
         this.userDAO = userDAO;
@@ -29,8 +26,8 @@ public class UserServiceImpl {
         userDAO.addUser(user);
     }
 
-    public List<User> getAllUsers(){
-        return userDAO.allUsers();
+    public List<User> getAllUsers(int page, int size){
+        return userDAO.allUsers(page, size);
     }
 
     public User getUserById(int idUser){

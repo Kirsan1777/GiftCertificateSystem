@@ -14,6 +14,7 @@ import java.util.List;
 @Component
 public class OrderServiceImpl {
     private OrderDAOImpl orderDAO;
+    private GiftCertificateServiceImpl giftCertificateService;
 
     public OrderServiceImpl() {
     }
@@ -23,8 +24,13 @@ public class OrderServiceImpl {
         this.orderDAO = orderDAO;
     }
 
-    public Iterable<UserOrder> allOrders() {
-        return orderDAO.allOrders();
+    @Autowired
+    public void setGiftCertificateServiceImpl(GiftCertificateServiceImpl giftCertificateService){
+        this.giftCertificateService = giftCertificateService;
+    }
+
+    public Iterable<UserOrder> allOrders(int page, int size) {
+        return orderDAO.allOrders(page, size);
     }
 
     public void deleteOrder(int idOrder) {
@@ -33,6 +39,7 @@ public class OrderServiceImpl {
 
     public void addOrder(UserOrder order) {
         order.setTimeOfPurchase(LocalDateTime.now());
+        order.setCost(giftCertificateService.findGiftById(order.getIdCertificate()).getPrice());
         orderDAO.addOrder(order);
     }
 

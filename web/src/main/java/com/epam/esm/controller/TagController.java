@@ -1,7 +1,5 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.error.ErrorCode;
-import com.epam.esm.error.ErrorHandler;
 import com.epam.esm.hateoas.HateoasManager;
 import com.epam.esm.model.Tag;
 import com.epam.esm.service.impl.TagServiceImpl;
@@ -12,11 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import javax.persistence.EntityNotFoundException;
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 /**
@@ -35,8 +29,8 @@ public class TagController extends HateoasManager<Tag> {
     }
 
     @GetMapping("/all-tags")
-    public Iterable<Tag> showTags(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
-                                  @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
+    public Iterable<Tag> showTags(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                  @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
         List<Tag> tags = tagService.viewAll(page, size);
         return HateoasManager.addLinksToTags(addPagination(tags, page, size, tagService.getCountOfEntities()));
     }
@@ -58,11 +52,11 @@ public class TagController extends HateoasManager<Tag> {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ExceptionHandler({ Exception.class })
+    @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleAccessDeniedException(
             Exception ex, WebRequest request) {
         return new ResponseEntity<Object>(
-                "Mistake in tag controller \nexception : " + ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN);
+                "Exception in tag controller \nexception : " + ex.getMessage() + "\n" + HttpStatus.FORBIDDEN, new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
 
 }
