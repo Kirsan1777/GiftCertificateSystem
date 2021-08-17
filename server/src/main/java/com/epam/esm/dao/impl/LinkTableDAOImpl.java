@@ -1,9 +1,10 @@
 package com.epam.esm.dao.impl;
 
 
+import com.epam.esm.dao.LinkTableDAO;
 import com.epam.esm.model.GiftTag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -12,8 +13,8 @@ import java.util.List;
 /**
  * Class for realise interface LinkTableDAO
  */
-@Component
-public class LinkTableDAOImpl {
+@Repository
+public class LinkTableDAOImpl implements LinkTableDAO {
 
     private final EntityManager entityManager;
 

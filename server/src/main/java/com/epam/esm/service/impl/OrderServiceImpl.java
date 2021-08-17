@@ -4,6 +4,7 @@ import com.epam.esm.dao.impl.OrderDAOImpl;
 import com.epam.esm.dao.impl.TagDAOImpl;
 import com.epam.esm.model.Tag;
 import com.epam.esm.model.UserOrder;
+import com.epam.esm.service.OrderService;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,8 +12,11 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The class for realise interface OrderService
+ */
 @Component
-public class OrderServiceImpl {
+public class OrderServiceImpl implements OrderService {
     private OrderDAOImpl orderDAO;
     private GiftCertificateServiceImpl giftCertificateService;
 

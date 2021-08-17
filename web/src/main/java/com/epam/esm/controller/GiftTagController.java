@@ -12,7 +12,6 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
 
-
 /**
  * Class of concatenated tables controller to handle requests and response
  */

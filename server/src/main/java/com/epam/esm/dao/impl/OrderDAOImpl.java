@@ -1,8 +1,10 @@
 package com.epam.esm.dao.impl;
 
+import com.epam.esm.dao.OrderDAO;
 import com.epam.esm.model.UserOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
@@ -10,8 +12,11 @@ import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Component
-public class OrderDAOImpl {
+/**
+ * Class for realise interface OrderDAO
+ */
+@Repository
+public class OrderDAOImpl implements OrderDAO {
 
     private final EntityManager entityManager;
 

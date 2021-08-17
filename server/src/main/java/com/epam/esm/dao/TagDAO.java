@@ -10,13 +10,14 @@ import java.util.List;
  * The interface tag DAO.
  */
 @Repository
-public interface TagDAO extends CrudRepository<Tag, Integer> {
+public interface TagDAO {
     /**
      * Method for get all tags
      *
-     * @param sort the param for sort table
+     * @param page the number of page
+     * @param size the number object for view
      */
-    //List<Tag> allTags(String sort);
+    List<Tag> viewAll(int page, int size);
 
     /**
      * Method for add tag
@@ -30,7 +31,7 @@ public interface TagDAO extends CrudRepository<Tag, Integer> {
      *
      * @param idTag the tag id
      */
-    int deleteTag(int idTag);
+    void deleteTag(int idTag);
 
     /**
      * Method for get one tag by name

@@ -7,6 +7,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * The class of user orders
+ */
 @Entity
 @Table(name = "user_order")
 public class UserOrder extends RepresentationModel<UserOrder> {
