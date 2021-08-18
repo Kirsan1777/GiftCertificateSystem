@@ -14,6 +14,9 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * Class for implementing dependent references for an object
+ */
 public class HateoasManager<T> {
 
     protected Collection<T> addPagination(List<T> entities, int page, int size, long countOfEntities) {

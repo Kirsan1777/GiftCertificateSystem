@@ -6,13 +6,7 @@ import com.epam.esm.model.GiftTag;
 import com.epam.esm.model.Tag;
 import com.epam.esm.service.GiftTagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 
@@ -20,7 +14,7 @@ import java.util.List;
  * The class for realise interface GiftTagService
  */
 @Component
-public class GiftTagServiceImpl {
+public class GiftTagServiceImpl implements GiftTagService {
     @Autowired
     private TagDAOImpl tagDAO;
 
@@ -35,11 +29,7 @@ public class GiftTagServiceImpl {
             tagDAO.addTag(tag);;
         }
         long id = tagDAO.readOneTagByName(nameTag).getId();
-        linkTableDAO.addTagToGiftCertificate(id, idGiftCertificate); //add method for many-to-many
-    }
-
-    public List<GiftTag> getConcatenatedTablesByIdGiftCertificate(int idCertificate){
-        return linkTableDAO.getConcatenatedTablesByIdGiftCertificate(idCertificate);
+        linkTableDAO.addTagToGiftCertificate(id, idGiftCertificate);
     }
 
 }

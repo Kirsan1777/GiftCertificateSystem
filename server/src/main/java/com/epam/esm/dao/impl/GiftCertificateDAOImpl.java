@@ -1,5 +1,6 @@
 package com.epam.esm.dao.impl;
 
+import com.epam.esm.dao.GiftCertificateDAO;
 import com.epam.esm.model.GiftCertificate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,11 +16,10 @@ import java.util.List;
  * Class for realise interface GiftCertificateDAO
  */
 @Repository
-public class GiftCertificateDAOImpl {
+public class GiftCertificateDAOImpl implements GiftCertificateDAO {
 
     private final EntityManager entityManager;
 
-    private static final String GET_ALL_CERTIFICATE = "SELECT gift_certificate FROM GiftCertificate gift_certificate";
     private static final String UPDATE_PRICE_IN_GIFT_CERTIFICATE = " UPDATE GiftCertificate gift_certificate SET gift_certificate.price = :price, gift_certificate.lastUpdateDate = :lastUpdateDate WHERE gift_certificate.id = :id";
     private static final String UPDATE_GIFT_CERTIFICATE = " UPDATE GiftCertificate gift_certificate SET gift_certificate.description = :description, gift_certificate.duration = :duration, gift_certificate.name = :name, gift_certificate.price = :price, gift_certificate.createDate = :create_date, gift_certificate.lastUpdateDate = :lastUpdateDate WHERE gift_certificate.id = :id";
     private static final String FIND_GIFT_CERTIFICATE_BY_TAGS = "SELECT * from gift_certificate where id in (SELECT gift_certificate.id FROM gift_certificate  JOIN many_to_many mtm on gift_certificate.id = mtm.id_certificate JOIN tag t on t.id = mtm.id_tag where t.name = ";

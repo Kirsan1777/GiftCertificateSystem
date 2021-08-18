@@ -1,35 +1,35 @@
 package com.epam.esm.service;
 
 import com.epam.esm.model.Tag;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * The interface tag service.
  */
-@Service
 public interface TagService {
     /**
      * Method for get all tags
      *
-     * @param sort the param for sort table
+     * @param page the param for input number page
+     * @param size count of object for view
      */
-    List<Tag> allTags(String sort);
+    List<Tag> viewAll(int page, int size);
 
     /**
      * Method for delete tag
      *
      * @param idTag the tag id
      */
-    int deleteTag(int idTag);
+    void deleteTag(int idTag);
+
 
     /**
      * Method for add tag
      *
-     * @param name the tag name
+     * @param tag the tag
      */
-    int addTag(String name);
+    void addTag(Tag tag);
 
     /**
      * Method for get one tag by name

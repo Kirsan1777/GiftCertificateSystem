@@ -16,6 +16,9 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
 
+/**
+ * Class of user controller to handle requests and response
+ */
 @RestController
 @RequestMapping("/user")
 @EnableAutoConfiguration

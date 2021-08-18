@@ -1,5 +1,6 @@
 package com.epam.esm.dao.impl;
 
+import com.epam.esm.dao.TagDAO;
 import com.epam.esm.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,7 @@ import java.util.List;
  * Class for realise interface TagDAO
  */
 @Repository
-public class TagDAOImpl{
+public class TagDAOImpl implements TagDAO {
 
     private final EntityManager entityManager;
 

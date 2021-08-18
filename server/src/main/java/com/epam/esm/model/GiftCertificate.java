@@ -1,6 +1,5 @@
 package com.epam.esm.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;

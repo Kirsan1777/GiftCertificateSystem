@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.impl.TagDAOImpl;
 import com.epam.esm.model.Tag;
+import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * The class for realise interface TagService
  */
 @Component
-public class TagServiceImpl {
+public class TagServiceImpl implements TagService {
     private TagDAOImpl tagDAOImpl;
 
     public TagServiceImpl() {

@@ -5,6 +5,9 @@ import org.springframework.hateoas.RepresentationModel;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * The class of user
+ */
 @Entity
 @Table(name = "users")
 public class User extends RepresentationModel<User> {

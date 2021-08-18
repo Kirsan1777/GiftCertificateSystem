@@ -24,4 +24,11 @@ public interface LinkTableDAO {
      * @param sortBy the param for sort table
      */
     List<GiftTag> getConcatenatedTables(String sortBy);
+
+    /**
+     * Method for concatenated tables gift certificate and tag by id gift certificate
+     *
+     * @param idCertificate the id gift certificate
+     */
+    List<GiftTag> getConcatenatedTablesByIdGiftCertificate(int idCertificate);
 }
