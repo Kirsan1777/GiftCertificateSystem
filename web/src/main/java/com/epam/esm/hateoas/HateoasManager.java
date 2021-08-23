@@ -6,6 +6,10 @@ import com.epam.esm.controller.UserController;
 import com.epam.esm.model.GiftCertificate;
 import com.epam.esm.model.Tag;
 import com.epam.esm.model.UserOrder;
+import com.epam.esm.model.dto.GiftCertificateDto;
+import com.epam.esm.model.dto.TagDto;
+import com.epam.esm.model.dto.UserOrderDto;
+import org.springframework.data.domain.Page;
 import org.springframework.hateoas.PagedModel;
 
 import java.util.Collection;
@@ -18,13 +22,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  * Class for implementing dependent references for an object
  */
 public class HateoasManager<T> {
-
-    protected Collection<T> addPagination(List<T> entities, int page, int size, long countOfEntities) {
-        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(size, page, countOfEntities);
-        return PagedModel.of(entities, pageMetadata).getContent();
-    }
-
-    public static Tag addLinksToTag(Tag tag) {
+//link for admin and user
+    public static TagDto addLinksToTag(TagDto tag) {
         tag.add(linkTo(methodOn(TagController.class).delete(tag.getId())).withRel("delete"));
         return tag;
     }
@@ -37,7 +36,7 @@ public class HateoasManager<T> {
         return tags;
     }
 
-    public static GiftCertificate addLinksToGiftCertificate(GiftCertificate giftCertificate) {
+    public static GiftCertificateDto addLinksToGiftCertificate(GiftCertificateDto giftCertificate) {
         giftCertificate.add(linkTo(methodOn(GiftCertificateController.class).deleteGift(giftCertificate.getId())).withRel("delete"));
         giftCertificate.add(linkTo(methodOn(GiftCertificateController.class).updateGift(giftCertificate.getId(), giftCertificate)).withRel("update"));
         for (Tag tag : giftCertificate.getTags()) {
@@ -46,8 +45,8 @@ public class HateoasManager<T> {
         return giftCertificate;
     }
 
-    public static Collection<GiftCertificate> addLinksToListGiftCertificate(Collection<GiftCertificate> giftCertificateList) {
-        for (GiftCertificate giftCertificate : giftCertificateList) {
+    public static Page<GiftCertificateDto> addLinksToListGiftCertificate(Page<GiftCertificateDto> giftCertificateList) {
+        for (GiftCertificateDto giftCertificate : giftCertificateList) {
             giftCertificate.add(linkTo(methodOn(GiftCertificateController.class).deleteGift(giftCertificate.getId())).withRel("delete"));
             giftCertificate.add(linkTo(methodOn(GiftCertificateController.class).updateGift(giftCertificate.getId(), giftCertificate)).withRel("update"));
             for (Tag tag : giftCertificate.getTags()) {
@@ -59,8 +58,8 @@ public class HateoasManager<T> {
         return giftCertificateList;
     }
 
-    public static Iterable<UserOrder> addLinksToListOrder(Iterable<UserOrder> orders) {
-        for (UserOrder order : orders) {
+    public static Page<UserOrderDto> addLinksToListOrder(Page<UserOrderDto> orders) {
+        for (UserOrderDto order : orders) {
             if (!order.hasLinks()) {
                 order.add(linkTo(methodOn(GiftCertificateController.class).show(order.getIdCertificate())).withRel("show gift certificate"));
                 order.add(linkTo(methodOn(UserController.class).getUserById(order.getIdUser())).withRel("show user"));
@@ -69,7 +68,7 @@ public class HateoasManager<T> {
         return orders;
     }
 
-    public static UserOrder addLinkToOrder(UserOrder order) {
+    public static UserOrderDto addLinkToOrder(UserOrderDto order) {
         order.add(linkTo(methodOn(GiftCertificateController.class).show(order.getIdCertificate())).withRel("show gift certificate"));
         order.add(linkTo(methodOn(UserController.class).getUserById(order.getIdUser())).withRel("show user"));
         return order;

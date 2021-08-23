@@ -16,7 +16,7 @@ import java.util.List;
  * Class for realise interface OrderDAO
  */
 @Repository
-public class OrderDAOImpl implements OrderDAO {
+public class OrderDAOImpl {
 
     private final EntityManager entityManager;
 

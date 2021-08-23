@@ -16,7 +16,7 @@ import java.util.List;
  * Class for realise interface TagDAO
  */
 @Repository
-public class TagDAOImpl implements TagDAO {
+public class TagDAOImpl {
 
     private final EntityManager entityManager;
 

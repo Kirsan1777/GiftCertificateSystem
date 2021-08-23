@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.dao.LinkTableDAO;
 import com.epam.esm.dao.impl.LinkTableDAOImpl;
 import com.epam.esm.dao.impl.TagDAOImpl;
 import com.epam.esm.model.GiftTag;
@@ -15,12 +16,14 @@ import java.util.List;
  */
 @Component
 public class GiftTagServiceImpl implements GiftTagService {
-    @Autowired
-    private TagDAOImpl tagDAO;
+    private final TagDAOImpl tagDAO;
+    private final LinkTableDAOImpl linkTableDAO;
 
+    public GiftTagServiceImpl(TagDAOImpl tagDAO, LinkTableDAOImpl linkTableDAO) {
+        this.tagDAO = tagDAO;
+        this.linkTableDAO = linkTableDAO;
+    }
 
-    @Autowired
-    private LinkTableDAOImpl linkTableDAO;
 
     public void addTagToGiftCertificate(String nameTag, int idGiftCertificate) {
         Tag tag = new Tag();
@@ -30,6 +33,7 @@ public class GiftTagServiceImpl implements GiftTagService {
         }
         long id = tagDAO.readOneTagByName(nameTag).getId();
         linkTableDAO.addTagToGiftCertificate(id, idGiftCertificate);
+        //linkTable.addTagToGift(id, idGiftCertificate);
     }
 
 }

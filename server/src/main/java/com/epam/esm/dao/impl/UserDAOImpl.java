@@ -16,7 +16,7 @@ import java.util.List;
  * Class for realise interface UserDAO
  */
 @Repository
-public class UserDAOImpl implements UserDAO {
+public class UserDAOImpl {
 
     private final EntityManager entityManager;
 

@@ -1,59 +1,57 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.dao.OrderDAO;
+import com.epam.esm.dao.UserDAO;
 import com.epam.esm.dao.impl.OrderDAOImpl;
-import com.epam.esm.dao.impl.UserDAOImpl;
 import com.epam.esm.model.*;
-import com.epam.esm.service.UserService;
+import com.epam.esm.model.dto.UserDto;
+import com.epam.esm.model.dto.UserOrderDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The class for realise interface UserService
  */
 @Component
-public class UserServiceImpl implements UserService {
-    private final UserDAOImpl userDAO;
-    private final OrderDAOImpl orderDAO;
+public class UserServiceImpl  {
+    private final UserDAO userDAO;
+    private final OrderDAO orderDAO;
     private final GiftCertificateServiceImpl giftCertificateService;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public UserServiceImpl(UserDAOImpl userDAO, OrderDAOImpl orderDAO, GiftCertificateServiceImpl giftCertificateService) {
+    public UserServiceImpl(UserDAO userDAO, OrderDAO orderDAO, GiftCertificateServiceImpl giftCertificateService, ModelMapper modelMapper) {
         this.userDAO = userDAO;
         this.orderDAO = orderDAO;
         this.giftCertificateService = giftCertificateService;
+        this.modelMapper = modelMapper;
     }
 
     public void addUser(User user){
-        userDAO.addUser(user);
+        userDAO.save(user);
     }
 
-    public List<User> getAllUsers(int page, int size){
-        return userDAO.allUsers(page, size);
+    public Page<User> getAllUsers(Pageable pageable){
+        return userDAO.findAll(pageable);
     }
 
-    public User getUserById(int idUser){
-        return userDAO.getOneUserById(idUser);
+    public UserDto getUserById(int idUser){
+        Optional<User> user = userDAO.findById(idUser);
+        UserDto userDto = user.map( u -> modelMapper.map(u, UserDto.class)).get();
+        return userDto;
     }
 
-    public List<Tag> getTheMostExpensiveTag(int id){
-        List<UserOrder> orders = (List<UserOrder>) orderDAO.getTheMostWidelyUsedTagOfAUserWithTheHighestCost(id);
-        Map<Integer, Integer> tags = new HashMap<>();
-        orders.stream().forEach(order -> {
-            if (tags.containsKey(order.getIdCertificate())){
-                tags.replace(order.getIdCertificate(), tags.get(order.getIdCertificate())+1);
-            }else{
-                tags.put(order.getIdCertificate(), 0);
-            }
-        });
-        Optional<Map.Entry<Integer, Integer>> maxEntry = tags.entrySet()
-                .stream()
-                .max(Comparator.comparing(Map.Entry::getValue));
-        int idCertificate = maxEntry.get().getKey();
-        GiftCertificate giftCertificate = giftCertificateService.findGiftById(idCertificate);
-        return giftCertificate.getTags();
+    public List<UserOrderDto> getTheMostExpensiveOrder(int id){
+        List<UserOrderDto> mostExpensiveOrder;
+            mostExpensiveOrder = orderDAO.findMostExpensiveUserOrder(id).stream()
+                    .map(o -> modelMapper.map(o, UserOrderDto.class)).collect(Collectors.toList());
+        return mostExpensiveOrder;
     }
 
 }

@@ -1,54 +1,30 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.model.UserOrder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 /**
  * The interface order DAO.
  */
-public interface OrderDAO {
+public interface OrderDAO extends JpaRepository<UserOrder, Integer>, JpaSpecificationExecutor<UserOrder> {
 
-    /**
-     * Method for getting all orders
-     *
-     * @param page the number of page
-     * @param size the number object for view
-     */
-    List<UserOrder> allOrders(int page, int size);
+    @Query(value ="select * from user_order where cost = " +
+            "(select max(cost) from user_order having id_user = :userId) and id_user = :userId",
+            nativeQuery = true
+    )
+    List<UserOrder> findMostExpensiveUserOrder(@Param("userId") int userId);
 
-    /**
-     * Method for getting one order by id
-     *
-     * @param id the order id
-     */
-    UserOrder getOneOrderById(int id);
+    Page<UserOrder> findAll(Pageable pageable);
 
-    /**
-     * Method for delete one order by id
-     *
-     * @param id the order id
-     */
-    void deleteOrder(int id);
+    Page<UserOrder> findUserOrderByIdUser(Pageable pageable, int id);
 
-    /**
-     * Method for add one order
-     *
-     * @param order the order entity
-     */
-    void addOrder(UserOrder order);
+    UserOrder findUserOrderByIdCertificate(int id);
 
-    /**
-     * Method for getting all user orders
-     *
-     * @param id the order id
-     */
-    Iterable<UserOrder> getAllUserOrders(int id);
-
-    /**
-     * Method for getting most widely used tag of a user with the highest cost
-     *
-     * @param id the user id
-     */
-    Iterable<UserOrder> getTheMostWidelyUsedTagOfAUserWithTheHighestCost(int id);
 }

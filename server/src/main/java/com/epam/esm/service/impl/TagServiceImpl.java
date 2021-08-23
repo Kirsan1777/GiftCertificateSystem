@@ -1,50 +1,58 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.dao.TagDAO;
 import com.epam.esm.dao.impl.TagDAOImpl;
+import com.epam.esm.model.GiftCertificate;
 import com.epam.esm.model.Tag;
-import com.epam.esm.service.TagService;
+import com.epam.esm.model.dto.GiftCertificateDto;
+import com.epam.esm.model.dto.TagDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * The class for realise interface TagService
  */
 @Component
-public class TagServiceImpl implements TagService {
-    private TagDAOImpl tagDAOImpl;
+public class TagServiceImpl {
+    private ModelMapper modelMapper;
+    private TagDAO tagDAO;
 
-    public TagServiceImpl() {
-    }
 
     @Autowired
-    public TagServiceImpl(TagDAOImpl tagDAOImpl) {
-        this.tagDAOImpl = tagDAOImpl;
+    public TagServiceImpl(TagDAO tagDAO, ModelMapper modelMapper) {
+        this.tagDAO = tagDAO;
+        this.modelMapper = modelMapper;
+
     }
 
-    public List<Tag> viewAll(int page, int size) {
-        return tagDAOImpl.viewAll(page, size);
+    @Transactional
+    public Page<Tag> viewAll(Pageable pageable) {
+        return tagDAO.findAll(pageable);
     }
 
+    @Transactional
     public void deleteTag(int idTag) {
-        tagDAOImpl.deleteTag(idTag);
+        tagDAO.deleteById(idTag);
     }
 
-    public void addTag(Tag tag) {
-        tagDAOImpl.addTag(tag);
+    @Transactional
+    public void addTag(TagDto tagDto) {
+        Tag tag = modelMapper.map(tagDto, Tag.class);
+        tagDAO.save(tag);
     }
 
-    public Tag findByName(String name) {
-        return tagDAOImpl.readOneTagByName(name);
-    }
-
-    public Tag findById(int id) {
-        return tagDAOImpl.readOneTagById(id);
-    }
-
-    public long getCountOfEntities(){
-        return tagDAOImpl.getCountOfEntities();
+    @Transactional
+    public TagDto findById(int id) {
+        Optional<Tag> tagToFind = tagDAO.findById(id);
+        TagDto tagDto;
+        tagDto = tagToFind.map(tag -> modelMapper.map(tag, TagDto.class)).get();
+        return tagDto;
     }
 
 }

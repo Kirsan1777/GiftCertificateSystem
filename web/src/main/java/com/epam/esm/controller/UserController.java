@@ -1,20 +1,31 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.hateoas.HateoasManager;
-import com.epam.esm.model.Tag;
 import com.epam.esm.model.User;
 import com.epam.esm.model.UserOrder;
+import com.epam.esm.model.dto.UserDto;
+import com.epam.esm.model.dto.UserOrderDto;
 import com.epam.esm.service.impl.OrderServiceImpl;
 import com.epam.esm.service.impl.UserServiceImpl;
+import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class of user controller to handle requests and response
@@ -33,49 +44,51 @@ public class UserController extends HateoasManager<User> {
         this.userService = userService;
     }
 
-    @GetMapping("/all-users")
-    public List<User> getAllUsers(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                                  @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
-        return userService.getAllUsers(page, size);
+    @GetMapping
+    public Page<User> getAllUsers(@PageableDefault(
+            sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        return userService.getAllUsers(pageable);
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable("id") int id) {
+    public UserDto getUserById(@PathVariable("id") int id) {
         return userService.getUserById(id);
     }
 
-    @PostMapping("/add-user")
-    public ResponseEntity<Object> addUser(@RequestBody User user) {
+    @PostMapping("/user")
+    public ResponseEntity<Object> addUser(@Valid @RequestBody User user) {
         userService.addUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/add-order/{idUser}")
-    public ResponseEntity<Object> addOrder(@RequestBody UserOrder order, @PathVariable("idUser") int idUser) {
+    @PostMapping("/order/{idUser}")
+    public ResponseEntity<Object> addOrder(@Valid @RequestBody UserOrder order, @PathVariable("idUser") int idUser) {
         order.setIdUser(idUser);
         orderService.addOrder(order);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/all-orders")
-    public Iterable<UserOrder> showOrders(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                                          @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
-        return HateoasManager.addLinksToListOrder(orderService.allOrders(page, size));
+    @GetMapping("/orders")
+    public Page<UserOrderDto> showOrders(@PageableDefault(
+            sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        return HateoasManager.addLinksToListOrder(orderService.allOrders(pageable));
     }
 
-    @GetMapping("/order-by-id/{idOrder}")
-    public UserOrder findOrderById(@PathVariable("idOrder") int idOrder) {
+    @GetMapping("/order/{idOrder}")
+    public UserOrderDto findOrderById(@PathVariable("idOrder") int idOrder) {
         return HateoasManager.addLinkToOrder(orderService.findOrderById(idOrder));
     }
 
-    @GetMapping("/all-user-orders/{id}")
-    public Iterable<UserOrder> allUserOrders(@PathVariable("id") int id) {
-        return HateoasManager.addLinksToListOrder(orderService.allUserOrders(id));
+    @GetMapping("/orders/{id}")
+    public Page<UserOrderDto> allUserOrders(@PageableDefault(
+            sort = "id", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable("id") int id) {
+        return HateoasManager.addLinksToListOrder(orderService.allUserOrders(pageable, id));
     }
 
-    @GetMapping("/most-used-tag/{id}")
-    public Iterable<Tag> mostExpensiveTag(@PathVariable("id") int idUser) {
-        return HateoasManager.addLinksToTags(userService.getTheMostExpensiveTag(idUser));
+    @GetMapping("/order/popular/{idUser}")
+    public List<UserOrderDto> mostExpensiveOrder(@PathVariable("idUser") int idUser) {
+        // TODO: 23.08.2021  add link to certificate with opportunity get tags
+        return userService.getTheMostExpensiveOrder(idUser);
     }
 
     @DeleteMapping("/{idOrder}")
@@ -89,6 +102,18 @@ public class UserController extends HateoasManager<User> {
             Exception ex, WebRequest request) {
         return new ResponseEntity<>(
                 "Exception in user controller \nexception : " + ex.getMessage() + "\n" + HttpStatus.FORBIDDEN, new HttpHeaders(), HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 
 }

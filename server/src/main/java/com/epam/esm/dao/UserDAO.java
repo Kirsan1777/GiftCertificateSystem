@@ -1,33 +1,15 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 /**
  * The interface user DAO.
  */
-public interface UserDAO {
-
-    /**
-     * Method for getting all users
-     *
-     * @param page the number of page
-     * @param size the number object for view
-     */
-    List<User> allUsers(int page, int size);
-
-    /**
-     * Method for getting one user by id
-     *
-     * @param id the user id
-     */
-    User getOneUserById(int id);
-
-    /**
-     * Method for add one user
-     *
-     * @param user the user entity
-     */
-    void addUser(User user);
+public interface UserDAO extends JpaRepository<User, Integer> {
+    Page<User> findAll(Pageable pageable);
 }

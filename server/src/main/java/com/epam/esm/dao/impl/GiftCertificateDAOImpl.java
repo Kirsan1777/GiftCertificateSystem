@@ -16,7 +16,7 @@ import java.util.List;
  * Class for realise interface GiftCertificateDAO
  */
 @Repository
-public class GiftCertificateDAOImpl implements GiftCertificateDAO {
+public class GiftCertificateDAOImpl {
 
     private final EntityManager entityManager;
 

@@ -1,74 +1,55 @@
 package com.epam.esm.model;
 
-import org.springframework.hateoas.RepresentationModel;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.Collection;
+import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * The class of user
  */
+
+@Data
 @Entity
 @Table(name = "users")
-public class User extends RepresentationModel<User> {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private double balance;
-    private String name;
+    private String username;
+    private String password;
+    private boolean enabled;
+    @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "id_user"))
+    @Enumerated(EnumType.STRING)
+    private Set<UserRole> role;
 
-    public User() {
-    }
-
-    public User(int id, double balance, String name) {
-        this.id = id;
-        this.balance = balance;
-        this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id && Double.compare(user.balance, balance) == 0 && Objects.equals(name, user.name);
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, balance, name);
+    public boolean isAccountNonLocked() {
+        return enabled;
     }
 
     @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", balance=" + balance +
-                ", name='" + name + '\'' +
-                '}';
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
+
 }
