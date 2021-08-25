@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class TagController extends HateoasManager<Tag> {
     }
 
     @GetMapping("/tags")
-    @Secured({"ROLE_CLIENT", "ROLE_ADMIN"})
+    @PreAuthorize("hasAuthority('developers:read')")
     public Iterable<Tag> showTags(@PageableDefault(
             sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Tag> tags = tagService.viewAll(pageable);
@@ -47,20 +48,20 @@ public class TagController extends HateoasManager<Tag> {
     }
 
     @GetMapping("/{id}")
-    @Secured({"ROLE_CLIENT", "ROLE_ADMIN"})
+    @PreAuthorize("hasAuthority('developers:read')")
     public TagDto show(@PathVariable("id") int id) {
         return HateoasManager.addLinksToTag(tagService.findById(id));
     }
 
     @PostMapping
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<Object> createTag(@Valid @RequestBody TagDto tag) {
         tagService.addTag(tag);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<Object> delete(@PathVariable("id") int id) {
         tagService.deleteTag(id);
         return new ResponseEntity<>(HttpStatus.OK);

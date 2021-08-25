@@ -19,20 +19,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User implements UserDetails {
+public class User  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private double balance;
     private String username;
     private String password;
-    private boolean enabled;
-    @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "id_user"))
     @Enumerated(EnumType.STRING)
-    private Set<UserRole> role;
+    private Status status;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
-    @Override
+   /* @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role;
     }
@@ -50,6 +49,6 @@ public class User implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
-    }
+    }*/
 
 }

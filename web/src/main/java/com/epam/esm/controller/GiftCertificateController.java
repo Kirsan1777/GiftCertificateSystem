@@ -16,6 +16,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,9 @@ public class GiftCertificateController {
     private final GiftTagServiceImpl giftTagService;
     private final GiftCertificateServiceImpl giftCertificate;
 
+    //private static final String ACCEPT_READ = 'developer:read';
+    //private static final String ACCEPT_WRITE = "developer:write";
+
     /*Use nouns to represent resources
     RESTful URI should refer to a resource that is a thing (noun) instead of
     referring to an action (verb) because nouns have properties which verbs do not have – similar to resources have attributes.
@@ -61,11 +65,13 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('developers:read')")
     public GiftCertificateDto show(@PathVariable("id") int id) {
         return HateoasManager.addLinksToGiftCertificate(giftCertificate.findById(id));
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('developers:read')")
     public Page<GiftCertificateDto> showCertificates(@PageableDefault(
             sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<GiftCertificateDto> pageCertificates = giftCertificate.findAll(pageable);
@@ -74,18 +80,21 @@ public class GiftCertificateController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<GiftCertificate> addGift(@Valid @RequestBody GiftCertificateDto gift) {
         giftCertificate.addGiftCertificate(gift);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/add/tag/{idGift}", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<Object> addTagToGift(@RequestBody Tag newTag, @PathVariable("idGift") int idGiftCertificate) {
         giftTagService.addTagToGiftCertificate(newTag.getName(), idGiftCertificate);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<Object> updateGift(@PathVariable("id") int id, @Valid @RequestBody GiftCertificateDto gift) {
         gift.setId(id);
         giftCertificate.updateGiftCertificate(gift);
@@ -93,12 +102,14 @@ public class GiftCertificateController {
     }
 
     @PatchMapping("price/{id}")
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<Object> updateGiftPrice(@RequestBody GiftCertificateDto gift, @PathVariable("id") int id) {
         giftCertificate.updateGiftCertificatePrice(id, gift.getPrice());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<Object> deleteGift(@PathVariable("id") int id) {
         giftCertificate.deleteGiftCertificate(id);
         return new ResponseEntity<>(HttpStatus.OK);
