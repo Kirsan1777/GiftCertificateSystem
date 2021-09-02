@@ -28,7 +28,15 @@ public class HateoasManager<T> {
         return tag;
     }
 
-    public static Iterable<Tag> addLinksToTags(Iterable<Tag> tags) {
+    public static Page<Tag> addLinksToTags(Page<Tag> tags) {
+        for (Tag tag : tags) {
+            tag.add(linkTo(methodOn(TagController.class).delete(tag.getId())).withRel("delete"));
+            tag.add(linkTo(methodOn(TagController.class).show(tag.getId())).withRel("show"));
+        }
+        return tags;
+    }
+
+    public static List<Tag> addLinksToListTags(List<Tag> tags) {
         for (Tag tag : tags) {
             tag.add(linkTo(methodOn(TagController.class).delete(tag.getId())).withRel("delete"));
             tag.add(linkTo(methodOn(TagController.class).show(tag.getId())).withRel("show"));

@@ -1,5 +1,6 @@
 package com.epam.esm.model;
 
+import lombok.ToString;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;

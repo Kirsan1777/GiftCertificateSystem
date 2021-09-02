@@ -2,18 +2,22 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDAO;
 import com.epam.esm.dao.OrderDAO;
-import com.epam.esm.model.GiftCertificate;
+import com.epam.esm.dao.UserDAO;
+import com.epam.esm.model.User;
 import com.epam.esm.model.UserOrder;
-import com.epam.esm.model.dto.GiftCertificateDto;
 import com.epam.esm.model.dto.UserOrderDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import static java.util.Objects.isNull;
 
 /**
  * The class for realise interface OrderService
@@ -23,15 +27,17 @@ public class OrderServiceImpl {
     private OrderDAO orderDAO;
     private ModelMapper modelMapper;
     private GiftCertificateDAO certificateDAO;
+    private UserDAO userDAO;
 
     public OrderServiceImpl() {
     }
 
     @Autowired
-    public OrderServiceImpl(OrderDAO orderDAO, ModelMapper modelMapper, GiftCertificateDAO certificateDAO) {
+    public OrderServiceImpl(OrderDAO orderDAO, ModelMapper modelMapper, GiftCertificateDAO certificateDAO, UserDAO userDAO) {
         this.orderDAO = orderDAO;
         this.modelMapper = modelMapper;
         this.certificateDAO = certificateDAO;
+        this.userDAO = userDAO;
     }
 
 
@@ -46,9 +52,11 @@ public class OrderServiceImpl {
 
     public void addOrder(UserOrder order) {
         order.setTimeOfPurchase(LocalDateTime.now());
-        //Optional<GiftCertificate> certificate = certificateDAO.findById(order.getIdCertificate());
         order.setCost(certificateDAO.findById(order.getIdCertificate()).get().getPrice());
-        //check isPresent?
+        User user = userDAO.findUserById(order.getIdUser());
+        if (isNull(user)) {
+            throw new BadCredentialsException("user not found");
+        }
         orderDAO.save(order);
     }
 

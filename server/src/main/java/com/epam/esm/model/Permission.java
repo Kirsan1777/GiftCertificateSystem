@@ -1,8 +1,9 @@
 package com.epam.esm.model;
 
 public enum Permission {
-    DEVELOPERS_READ("developers:read"),
-    DEVELOPERS_WRITE("developers:write");
+    //todo rename permission
+    READ("read"),
+    WRITE("write");
 
     private final String permission;
 

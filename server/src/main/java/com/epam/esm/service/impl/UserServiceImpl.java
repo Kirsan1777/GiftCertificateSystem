@@ -10,6 +10,7 @@ import com.epam.esm.model.dto.UserOrderDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -46,21 +47,21 @@ public class UserServiceImpl  {
         userDAO.save(user);
     }
 
-    public Optional<UserDto> createUser(UserDto newUser) {
+    public String createUser(UserDto newUser) {
         Optional<UserDto> createdUser;
         if (isUsernameFree(newUser.getUsername())) {
             User user = modelMapper.map(newUser, User.class);
             user.setPassword(encoder.encode(newUser.getPassword()));
             user.setRole(UserRole.CLIENT);
             user.setStatus(Status.ACTIVE);
-            //user.setCertificateOrders(new HashSet<>());
             createdUser = Optional.of(modelMapper.map(userDAO.save(user), UserDto.class));
+            createdUser.get().setPassword(null);
             createdUser.get().setOperationStatus("User was created");
         } else {
             createdUser = Optional.of(modelMapper.map(newUser, UserDto.class));
             createdUser.get().setOperationStatus("Username is taken");
         }
-        return createdUser;
+        return createdUser.get().getOperationStatus();
     }
 
     public Page<User> getAllUsers(Pageable pageable){
@@ -73,19 +74,19 @@ public class UserServiceImpl  {
         return userDto;
     }
 
-    public List<UserOrderDto> getTheMostExpensiveOrder(int id){
+    public Page<UserOrderDto> getTheMostExpensiveOrder(int id, Pageable pageable){
         List<UserOrderDto> mostExpensiveOrder;
-            mostExpensiveOrder = orderDAO.findMostExpensiveUserOrder(id).stream()
+            mostExpensiveOrder = orderDAO.findMostExpensiveUserOrder(id, pageable).stream()
                     .map(o -> modelMapper.map(o, UserOrderDto.class)).collect(Collectors.toList());
-        return mostExpensiveOrder;
+        return new PageImpl<>(mostExpensiveOrder);
     }
 
-    public List<TagDto> findMostUsedUserTag(int idUser){
-        List<TagDto> mostUsedUserTag;
+    public List<Tag> findMostUsedUserTag(int idUser){
+        /*List<TagDto> mostUsedUserTag;
         mostUsedUserTag = tagDAO.findMostUsedUserTag(idUser).stream()
-                .map(o -> modelMapper.map(o, TagDto.class)).collect(Collectors.toList());
-         tagDAO.findMostUsedUserTag(idUser);
-        return mostUsedUserTag;
+                .map(o -> modelMapper.map(o, TagDto.class)).collect(Collectors.toList());*/
+        return tagDAO.findMostUsedUserTag(idUser);
+
     }
 
     private boolean isUsernameFree(String username) {

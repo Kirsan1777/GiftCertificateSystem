@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class TagDto extends RepresentationModel<TagDto> {
     @NotNull
-    @Size(min = 1, max = 100, message = "name length should contain from 1 to 100 symbols")
+    @Size(min = 3, max = 100, message = "name length should contain from 1 to 100 symbols")
     private String name;
     private int id;
 }

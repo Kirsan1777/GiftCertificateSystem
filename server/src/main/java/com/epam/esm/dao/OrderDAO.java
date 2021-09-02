@@ -19,7 +19,7 @@ public interface OrderDAO extends JpaRepository<UserOrder, Integer>, JpaSpecific
             "(select max(cost) from user_order having id_user = :userId) and id_user = :userId",
             nativeQuery = true
     )
-    List<UserOrder> findMostExpensiveUserOrder(@Param("userId") int userId);
+    Page<UserOrder> findMostExpensiveUserOrder(@Param("userId") int userId, Pageable pageable);
 
     Page<UserOrder> findAll(Pageable pageable);
 

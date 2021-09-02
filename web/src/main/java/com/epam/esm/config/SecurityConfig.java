@@ -1,8 +1,6 @@
 package com.epam.esm.config;
 
-import com.epam.esm.dao.UserDAO;
 import com.epam.esm.security.JwtConfigurer;
-import com.epam.esm.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,11 +35,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                //stateless – no session will be created or used by Spring Security
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/login").permitAll()
                 .antMatchers("/auth/registration").permitAll()
+                .antMatchers("/certificate/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .apply(jwtConfigurer);

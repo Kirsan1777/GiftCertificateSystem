@@ -1,23 +1,24 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDAO;
-import com.epam.esm.dao.impl.GiftCertificateDAOImpl;
+import com.epam.esm.dao.specification.GiftCertificateSpecification;
+import com.epam.esm.dao.type.SearchType;
 import com.epam.esm.model.GiftCertificate;
+import com.epam.esm.model.Tag;
 import com.epam.esm.model.dto.GiftCertificateDto;
-import com.epam.esm.service.GiftCertificateService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.*;
 
 /**
@@ -84,31 +85,38 @@ public class GiftCertificateServiceImpl {
         giftCertificateDAO.save(gift);
     }
 
-
-
-   /* @Transactional
-    public void updateGiftCertificatePrice(int idGift, double price){
-        giftCertificateDAO.(idGift, price);
-    }*/
-
-    /*public Collection<GiftCertificate> allGiftCertificate(int page, int size){
-        return giftCertificateDAO.allCertificate(page, size);
+    @Transactional
+    public List<GiftCertificateDto> filter(List<String> tags) {
+        List<GiftCertificate> filteredCertificates;
+        Optional<Specification<GiftCertificate>> currentSpecification = defineSpecification(tags);
+        filteredCertificates = currentSpecification.map(giftCertificateSpecification ->
+                giftCertificateDAO.findAll(giftCertificateSpecification, Sort.by(Sort.DEFAULT_DIRECTION, "id"))).orElseGet(() ->
+                giftCertificateDAO.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "id")));
+                        //.orElseGet(() ->
+                        //giftCertificateDAO.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "id")));
+        return filteredCertificates.stream()
+                .map(c -> modelMapper.map(c, GiftCertificateDto.class))
+                .collect(Collectors.toList());
     }
 
-    public void updateGiftCertificate(GiftCertificate gift){
-        gift.setCreateDate(giftCertificateDAO.readOneGiftById(gift.getId()).getCreateDate());
-        giftCertificateDAO.updateCertificate(gift);
+    private Optional<Specification<GiftCertificate>> defineSpecification(
+            List<String> tagNames) {
+        Optional<Specification<GiftCertificate>> currentSpecification = Optional.empty();
+        currentSpecification = defineTagSpecification(tagNames);
+        return currentSpecification;
     }
 
-    public void updateGiftCertificatePrice(int idGift, double price){
-        giftCertificateDAO.updateCertificatePrice(idGift, price);
+    private Optional<Specification<GiftCertificate>> defineTagSpecification(List<String> tagNames) {
+        Optional<Specification<GiftCertificate>> tagSpecification = Optional.empty();
+        if (!tagNames.isEmpty()) {
+            tagSpecification = Optional.of(Specification
+                    .where(GiftCertificateSpecification.filterCertificatesByTag(tagNames.get(0))));
+            for (int i = 1; i < tagNames.size(); i++) {
+                tagSpecification = Optional.of(tagSpecification.get().and(Specification
+                        .where(GiftCertificateSpecification.filterCertificatesByTag(tagNames.get(i)))));
+            }
+        }
+        return tagSpecification;
     }
 
-    public GiftCertificate findGiftById(int id){
-        return giftCertificateDAO.readOneGiftById(id);
-    }
-
-    public List<GiftCertificate> allGiftCertificateByTags(List<String> tagsName){
-        return giftCertificateDAO.allGiftCertificateByTags(tagsName);
-    }*/
 }

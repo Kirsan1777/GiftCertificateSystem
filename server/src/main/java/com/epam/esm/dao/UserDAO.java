@@ -16,6 +16,6 @@ import java.util.Optional;
 public interface UserDAO extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
     Page<User> findAll(Pageable pageable);
     User findByUsername(String username);
-
     Optional<User> findById(int id);
+    User findUserById(int idUser);
 }
