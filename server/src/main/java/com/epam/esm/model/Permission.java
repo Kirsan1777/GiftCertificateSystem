@@ -1,7 +1,10 @@
 package com.epam.esm.model;
 
+/**
+ * The class with users permissions
+ */
 public enum Permission {
-    //todo rename permission
+
     READ("read"),
     WRITE("write");
 

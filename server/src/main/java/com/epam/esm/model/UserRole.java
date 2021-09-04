@@ -5,6 +5,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * The class with users roles
+ */
 public enum UserRole {
     CLIENT(Set.of(Permission.READ)),
     ADMIN(Set.of(Permission.READ, Permission.WRITE));

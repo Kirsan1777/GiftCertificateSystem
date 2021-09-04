@@ -7,6 +7,7 @@ import com.epam.esm.model.*;
 import com.epam.esm.model.dto.TagDto;
 import com.epam.esm.model.dto.UserDto;
 import com.epam.esm.model.dto.UserOrderDto;
+import com.epam.esm.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,7 @@ import static java.util.Objects.isNull;
  * The class for realise interface UserService
  */
 @Component
-public class UserServiceImpl  {
+public class UserServiceImpl implements UserService {
     private final UserDAO userDAO;
     private final OrderDAO orderDAO;
     private final TagDAO tagDAO;
@@ -41,10 +42,6 @@ public class UserServiceImpl  {
         this.giftCertificateService = giftCertificateService;
         this.modelMapper = modelMapper;
         this.encoder = encoder;
-    }
-
-    public void addUser(User user){
-        userDAO.save(user);
     }
 
     public String createUser(UserDto newUser) {
@@ -82,15 +79,7 @@ public class UserServiceImpl  {
     }
 
     public List<Tag> findMostUsedUserTag(int idUser){
-        /*List<TagDto> mostUsedUserTag;
-        mostUsedUserTag = tagDAO.findMostUsedUserTag(idUser).stream()
-                .map(o -> modelMapper.map(o, TagDto.class)).collect(Collectors.toList());*/
         return tagDAO.findMostUsedUserTag(idUser);
-
-    }
-
-    private boolean isUsernameFree(String username) {
-        return isNull(userDAO.findByUsername(username));
     }
 
     @Transactional
@@ -98,4 +87,7 @@ public class UserServiceImpl  {
         return userDAO.findByUsername(username);
     }
 
+    private boolean isUsernameFree(String username) {
+        return isNull(userDAO.findByUsername(username));
+    }
 }

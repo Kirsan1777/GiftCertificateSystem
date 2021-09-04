@@ -20,6 +20,9 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class of authentication controller to handle requests and response
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {

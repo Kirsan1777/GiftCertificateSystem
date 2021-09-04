@@ -3,7 +3,6 @@ package com.epam.esm.controller;
 
 import com.epam.esm.hateoas.HateoasManager;
 import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.model.Tag;
 import com.epam.esm.model.dto.GiftCertificateDto;
 import com.epam.esm.model.dto.TagDto;
 import com.epam.esm.service.impl.GiftCertificateServiceImpl;
@@ -13,20 +12,18 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -36,10 +33,6 @@ import java.util.*;
 @RequestMapping("/certificate")
 @EnableAutoConfiguration
 public class GiftCertificateController {
-
-    //todo added exception handler +
-    //todo added validator
-    //todo check secured annotation and preauthorize +
 
     private final GiftTagServiceImpl giftTagService;
     private final GiftCertificateServiceImpl giftCertificate;
@@ -117,11 +110,3 @@ public class GiftCertificateController {
     }
 
 }
-
-    /*@GetMapping("/tag")
-    @PreAuthorize("hasAuthority('developers:read')")
-    public Optional<Specification<GiftCertificate>> showGiftCertificateByTag(@PageableDefault(
-            sort = "id", direction = Sort.Direction.DESC) Pageable pageable, @RequestParam(value = "tag") List<String> tagNames) {
-        Optional<Specification<GiftCertificate>> pageCertificates = giftCertificate.defineTagSpecification(tagNames);
-        return pageCertificates;
-    }*/

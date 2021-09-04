@@ -19,15 +19,36 @@ import java.util.List;
  */
 @Repository
 public interface TagDAO extends JpaRepository<Tag, Integer>, JpaSpecificationExecutor<Tag> {
+    /**
+     * Method for adding a tag for a gift certificate
+     *
+     * @param idCertificate the gift certificate id
+     * @param idTag the tag id
+     */
     @Modifying
     @Query(value = "INSERT INTO many_to_many(id_tag, id_certificate) VALUES (:idTag, :idCertificate)",
             nativeQuery = true)
     void addTagToGift(@Param("idTag") int idTag, @Param("idCertificate") int idCertificate);
 
+    /**
+     * Method for getting all tags
+     *
+     * @param pageable the setting for class pageable
+     */
     Page<Tag> findAll(Pageable pageable);
 
+    /**
+     * Method for getting tag by name
+     *
+     * @param name the tag name
+     */
     Tag findTagByName(String name);
 
+    /**
+     * Method for getting most used user tag
+     *
+     * @param idUser the user id
+     */
     @Query(value = "SELECT t.id, t.name FROM many_to_many gct" +
             " JOIN tag t ON gct.id_tag = t.id " +
             "JOIN gift_certificate c ON gct.id_certificate = c.id  " +

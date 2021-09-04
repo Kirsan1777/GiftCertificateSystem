@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 @Entity
 public class GiftTag extends RepresentationModel<GiftTag> {
-    //use many to many annotation
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

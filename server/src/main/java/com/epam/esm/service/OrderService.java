@@ -1,6 +1,9 @@
 package com.epam.esm.service;
 
 import com.epam.esm.model.UserOrder;
+import com.epam.esm.model.dto.UserOrderDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * The interface order service.
@@ -10,10 +13,9 @@ public interface OrderService {
     /**
      * Method for getting all orders
      *
-     * @param page the number of page
-     * @param size the number object for view
+     * @param pageable the setting for class pageable
      */
-    Iterable<UserOrder> allOrders(int page, int size);
+    Page<UserOrderDto> allOrders(Pageable pageable);
 
     /**
      * Method for delete one order by id
@@ -34,12 +36,13 @@ public interface OrderService {
      *
      * @param id the order id
      */
-    UserOrder findOrderById(int id);
+    UserOrderDto findOrderById(int id);
 
     /**
      * Method for getting all user orders
      *
      * @param idUser the order id
+     * @param pageable the setting for class pageable
      */
-    Iterable<UserOrder> allUserOrders(int idUser);
+    Page<UserOrderDto> allUserOrders(Pageable pageable, int idUser);
 }

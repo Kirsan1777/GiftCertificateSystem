@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.model.User;
 import com.epam.esm.model.dto.LoginDto;
+import com.epam.esm.service.SecurityService;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 import static java.util.Objects.isNull;
 
 @Service
-public class SecurityServiceImpl {
+public class SecurityServiceImpl implements SecurityService {
     private AuthenticationManager authenticationManager;
     private UserServiceImpl userService;
 
@@ -27,6 +28,7 @@ public class SecurityServiceImpl {
         this.userService = userService;
     }
 
+    @Override
     public User loginUser(LoginDto loginDto) {
         try {
             String username = loginDto.getUsername();

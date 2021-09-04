@@ -1,31 +1,25 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.dao.TagDAO;
 import com.epam.esm.hateoas.HateoasManager;
 import com.epam.esm.model.Tag;
 import com.epam.esm.model.User;
 import com.epam.esm.model.UserOrder;
-import com.epam.esm.model.dto.GiftCertificateDto;
-import com.epam.esm.model.dto.TagDto;
 import com.epam.esm.model.dto.UserDto;
 import com.epam.esm.model.dto.UserOrderDto;
 import com.epam.esm.service.impl.OrderServiceImpl;
 import com.epam.esm.service.impl.UserServiceImpl;
-import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
 import java.util.HashMap;

@@ -31,24 +31,4 @@ public class User  {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-   /* @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return enabled;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }*/
-
 }

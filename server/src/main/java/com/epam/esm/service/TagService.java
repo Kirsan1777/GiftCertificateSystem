@@ -1,6 +1,9 @@
 package com.epam.esm.service;
 
 import com.epam.esm.model.Tag;
+import com.epam.esm.model.dto.TagDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -8,13 +11,13 @@ import java.util.List;
  * The interface tag service.
  */
 public interface TagService {
+
     /**
      * Method for get all tags
      *
-     * @param page the param for input number page
-     * @param size count of object for view
+     * @param pageable the setting for class pageable
      */
-    List<Tag> viewAll(int page, int size);
+    Page<Tag> viewAll(Pageable pageable);
 
     /**
      * Method for delete tag
@@ -23,26 +26,18 @@ public interface TagService {
      */
     void deleteTag(int idTag);
 
-
     /**
      * Method for add tag
      *
-     * @param tag the tag
+     * @param tagDto the class with information about tag
      */
-    void addTag(Tag tag);
-
-    /**
-     * Method for get one tag by name
-     *
-     * @param name the tag name
-     */
-    Tag findByName(String name);
+    void  addTag(TagDto tagDto);
 
     /**
      * Method for get one tag by id
      *
      * @param id the tag id
      */
-    Tag findById(int id);
+    TagDto findById(int id);
 
 }

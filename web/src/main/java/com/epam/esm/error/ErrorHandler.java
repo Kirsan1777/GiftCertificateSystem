@@ -2,6 +2,9 @@ package com.epam.esm.error;
 
 import lombok.Data;
 
+/**
+ * Class to display the exception
+ */
 @Data
 public class ErrorHandler {
     private String errorMessage;

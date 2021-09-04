@@ -13,6 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * Class with setting for spring security
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(

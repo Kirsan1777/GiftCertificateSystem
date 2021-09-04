@@ -18,6 +18,7 @@ public class GiftTagServiceImpl implements GiftTagService {
         this.tagDAO = tagDAO;
     }
 
+    @Override
     @Transactional
     public void addTagToGiftCertificate(String nameTag, int idGiftCertificate) {
         Tag tag = new Tag();

@@ -10,6 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Class for realise interface UserDetails
+ */
 @Data
 public class SecurityUser implements UserDetails {
 

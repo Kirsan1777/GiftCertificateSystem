@@ -15,16 +15,31 @@ import java.util.List;
  */
 public interface OrderDAO extends JpaRepository<UserOrder, Integer>, JpaSpecificationExecutor<UserOrder> {
 
+    /**
+     * Method for getting most expensive user order
+     *
+     * @param pageable the setting for class pageable
+     * @param userId this is the user id
+     */
     @Query(value ="select * from user_order where cost = " +
             "(select max(cost) from user_order having id_user = :userId) and id_user = :userId",
             nativeQuery = true
     )
     Page<UserOrder> findMostExpensiveUserOrder(@Param("userId") int userId, Pageable pageable);
 
+    /**
+     * Method for getting all users orders
+     *
+     * @param pageable the setting for class pageable
+     */
     Page<UserOrder> findAll(Pageable pageable);
 
+    /**
+     * Method for getting user orders
+     *
+     * @param pageable the setting for class pageable
+     * @param id this is the user id
+     */
     Page<UserOrder> findUserOrderByIdUser(Pageable pageable, int id);
-
-    UserOrder findUserOrderByIdCertificate(int id);
 
 }

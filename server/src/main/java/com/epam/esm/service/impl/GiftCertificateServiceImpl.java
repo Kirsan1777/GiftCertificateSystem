@@ -2,10 +2,9 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDAO;
 import com.epam.esm.dao.specification.GiftCertificateSpecification;
-import com.epam.esm.dao.type.SearchType;
 import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.model.Tag;
 import com.epam.esm.model.dto.GiftCertificateDto;
+import com.epam.esm.service.GiftCertificateService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,13 +18,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.*;
 
 /**
  * The class for realise interface GiftCertificateService
  */
 @Component
-public class GiftCertificateServiceImpl {
+public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Autowired
     private GiftCertificateDAO giftCertificateDAO;
@@ -41,6 +39,7 @@ public class GiftCertificateServiceImpl {
         this.modelMapper = modelMapper;
     }
 
+    @Override
     @Transactional
     public void addGiftCertificate(GiftCertificateDto giftDto){
         GiftCertificate gift = modelMapper.map(giftDto, GiftCertificate.class);
@@ -49,17 +48,20 @@ public class GiftCertificateServiceImpl {
         giftCertificateDAO.save(gift);
     }
 
+    @Override
     @Transactional
     public void deleteGiftCertificate(int id){
         giftCertificateDAO.deleteById(id);
     }
 
+    @Override
     @Transactional
     public Page<GiftCertificateDto> findAll(Pageable pageable){
         return giftCertificateDAO.findAll(pageable)
                 .map(c -> modelMapper.map(c, GiftCertificateDto.class));
     }
 
+    @Override
     @Transactional
     public GiftCertificateDto findById(int id){
         Optional<GiftCertificate> certificateToFind;
@@ -69,6 +71,7 @@ public class GiftCertificateServiceImpl {
         return giftCertificateDto;
     }
 
+    @Override
     @Transactional
     public void updateGiftCertificate(GiftCertificateDto giftDto){
         GiftCertificate gift = modelMapper.map(giftDto, GiftCertificate.class);
@@ -77,6 +80,7 @@ public class GiftCertificateServiceImpl {
         giftCertificateDAO.save(gift);
     }
 
+    @Override
     @Transactional
     public void updateGiftCertificatePrice(int idGift, double price){
         GiftCertificate gift = giftCertificateDAO.getById(idGift);
@@ -85,6 +89,7 @@ public class GiftCertificateServiceImpl {
         giftCertificateDAO.save(gift);
     }
 
+    @Override
     @Transactional
     public List<GiftCertificateDto> filter(List<String> tags) {
         List<GiftCertificate> filteredCertificates;
@@ -92,8 +97,6 @@ public class GiftCertificateServiceImpl {
         filteredCertificates = currentSpecification.map(giftCertificateSpecification ->
                 giftCertificateDAO.findAll(giftCertificateSpecification, Sort.by(Sort.DEFAULT_DIRECTION, "id"))).orElseGet(() ->
                 giftCertificateDAO.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "id")));
-                        //.orElseGet(() ->
-                        //giftCertificateDAO.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "id")));
         return filteredCertificates.stream()
                 .map(c -> modelMapper.map(c, GiftCertificateDto.class))
                 .collect(Collectors.toList());

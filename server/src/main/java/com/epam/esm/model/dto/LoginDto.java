@@ -13,11 +13,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class LoginDto {
     @NotNull
-    //@Min(value = 4, message = "Input name more than 3 symbols")
-    //@Max(value = 50, message = "Max name length can be 50 symbols")
     private String username;
     @NotNull
-    //@Min(value = 4, message = "Input password more than 3 symbols")
-    //@Max(value = 50, message = "Max password length can be 250 symbols")
+    @Min(value = 4, message = "Input password more than 3 symbols")
+    @Max(value = 250, message = "Max password length can be 250 symbols")
     private String password;
 }

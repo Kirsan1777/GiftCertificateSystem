@@ -15,5 +15,10 @@ import java.util.List;
 
 @Repository
 public interface GiftCertificateDAO extends JpaRepository<GiftCertificate, Integer>, JpaSpecificationExecutor<GiftCertificate> {
+    /**
+     * Method for getting all gift certificates
+     *
+     * @param pageable the setting for class pageable
+     */
     Page<GiftCertificate> findAll(Pageable pageable);
 }

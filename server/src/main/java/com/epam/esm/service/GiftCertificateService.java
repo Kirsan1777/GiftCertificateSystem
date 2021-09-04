@@ -1,6 +1,9 @@
 package com.epam.esm.service;
 
 import com.epam.esm.model.GiftCertificate;
+import com.epam.esm.model.dto.GiftCertificateDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -15,9 +18,9 @@ public interface GiftCertificateService {
     /**
      * Method for add one gift certificate
      *
-     * @param fidt the gift certificate entity
+     * @param giftDto the gift certificate entity
      */
-    void addGiftCertificate(GiftCertificate gift);
+    void addGiftCertificate(GiftCertificateDto giftDto);
 
     /**
      * Method for delete one gift certificate by id
@@ -29,17 +32,16 @@ public interface GiftCertificateService {
     /**
      * Method for getting all gift certificate
      *
-     * @param page the number of page
-     * @param size the number object for view
+     * @param pageable the setting for class pageable
      */
-    Collection<GiftCertificate> allGiftCertificate(int page, int size);
+    Page<GiftCertificateDto> findAll(Pageable pageable);
 
     /**
      * Method for update one gift certificate
      *
-     * @param gift the gift certificate entity
+     * @param giftDto the gift certificate entity
      */
-    void updateGiftCertificate(GiftCertificate gift);
+    void updateGiftCertificate(GiftCertificateDto giftDto);
 
     /**
      * Method for update one gift certificate price only
@@ -54,12 +56,12 @@ public interface GiftCertificateService {
      *
      * @param id the gift certificate id
      */
-    GiftCertificate findGiftById(int id);
+    GiftCertificateDto findById(int id);
 
     /**
      * Method for getting one gift certificate by id
      *
-     * @param tagsName the tag for search gift certificate
+     * @param tags the tags for search gift certificate
      */
-    List<GiftCertificate> allGiftCertificateByTags(List<String> tagsName);
+    List<GiftCertificateDto> filter(List<String> tags);
 }

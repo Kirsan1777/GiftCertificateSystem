@@ -1,7 +1,6 @@
 package com.epam.esm.security;
 
 import com.epam.esm.dao.UserDAO;
-import com.epam.esm.model.GiftCertificate;
 import com.epam.esm.model.User;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
@@ -10,8 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
+/**
+ * Class for checking load user
+ */
 @Data
 @Component
 public class JwtUserDetailsService implements UserDetailsService {

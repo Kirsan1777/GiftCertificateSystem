@@ -22,7 +22,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  * Class for implementing dependent references for an object
  */
 public class HateoasManager<T> {
-//link for admin and user
+
     public static TagDto addLinksToTag(TagDto tag) {
         tag.add(linkTo(methodOn(TagController.class).delete(tag.getId())).withRel("delete"));
         return tag;
