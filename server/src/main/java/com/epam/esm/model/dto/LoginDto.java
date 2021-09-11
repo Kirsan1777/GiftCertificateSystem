@@ -15,7 +15,5 @@ public class LoginDto {
     @NotNull
     private String username;
     @NotNull
-    @Min(value = 4, message = "Input password more than 3 symbols")
-    @Max(value = 250, message = "Max password length can be 250 symbols")
     private String password;
 }

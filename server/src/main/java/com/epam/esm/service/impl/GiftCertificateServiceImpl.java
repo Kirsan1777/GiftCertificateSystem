@@ -48,6 +48,15 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificateDAO.save(gift);
     }
 
+    @Transactional
+    public GiftCertificate addGiftCertificateWithResult(GiftCertificateDto giftDto){
+        GiftCertificate gift = modelMapper.map(giftDto, GiftCertificate.class);
+        gift.setCreateDate(LocalDateTime.now());
+        gift.setLastUpdateDate(LocalDateTime.now());
+        giftCertificateDAO.save(gift);
+        return gift;
+    }
+
     @Override
     @Transactional
     public void deleteGiftCertificate(int id){
