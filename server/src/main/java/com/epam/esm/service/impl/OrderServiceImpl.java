@@ -7,6 +7,7 @@ import com.epam.esm.model.User;
 import com.epam.esm.model.UserOrder;
 import com.epam.esm.model.dto.UserOrderDto;
 import com.epam.esm.service.OrderService;
+import org.hibernate.criterion.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -61,6 +62,17 @@ public class OrderServiceImpl implements OrderService {
             throw new BadCredentialsException("user not found");
         }
         orderDAO.save(order);
+    }
+
+    public UserOrder addOrderWithResult(UserOrder order) {
+        order.setTimeOfPurchase(LocalDateTime.now());
+        order.setCost(certificateDAO.findById(order.getIdCertificate()).get().getPrice());
+        User user = userDAO.findUserById(order.getIdUser());
+        if (isNull(user)) {
+            throw new BadCredentialsException("user not found");
+        }
+        orderDAO.save(order);
+        return order;
     }
 
     @Override
