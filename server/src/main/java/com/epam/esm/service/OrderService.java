@@ -32,6 +32,13 @@ public interface OrderService {
     void addOrder(UserOrder order);
 
     /**
+     * Method for add one order
+     *
+     * @param order the order entity
+     */
+    UserOrder addOrderWithResult(UserOrder order);
+
+    /**
      * Method for getting one order by id
      *
      * @param id the order id

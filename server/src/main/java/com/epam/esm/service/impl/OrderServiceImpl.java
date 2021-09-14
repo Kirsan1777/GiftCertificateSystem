@@ -64,6 +64,7 @@ public class OrderServiceImpl implements OrderService {
         orderDAO.save(order);
     }
 
+    @Override
     public UserOrder addOrderWithResult(UserOrder order) {
         order.setTimeOfPurchase(LocalDateTime.now());
         order.setCost(certificateDAO.findById(order.getIdCertificate()).get().getPrice());
@@ -85,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<UserOrderDto> allUserOrders(Pageable pageable, int idUser){
-        Page<UserOrder> orders = orderDAO.findUserOrderByIdUser(pageable,idUser);
+        Page<UserOrder> orders = orderDAO.findUserOrderByIdUser(pageable, idUser);
         Page<UserOrderDto> ordersDto = orders.map(order -> modelMapper.map(order, UserOrderDto.class));
         return ordersDto;
     }

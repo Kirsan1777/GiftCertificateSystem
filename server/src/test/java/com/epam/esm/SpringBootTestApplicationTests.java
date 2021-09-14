@@ -26,26 +26,6 @@ class SpringBootTestApplicationTests {
         return new ModelMapper();
     }
 
-    private static GiftCertificateServiceImpl giftCertificateService;
-    private static GiftCertificate giftCertificate = new GiftCertificate(1,"newTag",200,1,
-            LocalDateTime.of(2017, Month.NOVEMBER, 30, 0,0),
-            LocalDateTime.of(2017, Month.NOVEMBER, 30, 0,0),
-            "newGift", null);
-    private static GiftCertificate giftCertificateUpdated = new GiftCertificate(1,"newTagUpdate",200,1,
-            LocalDateTime.of(2017, Month.NOVEMBER, 30, 0,0),
-            LocalDateTime.of(2017, Month.NOVEMBER, 30, 0,0),
-            "newGift", null);
-    private GiftCertificateDto giftDto = modelMapper().map(giftCertificate, GiftCertificateDto.class);
-
-    @BeforeAll
-    public static void setup(){
-        GiftCertificateDAO giftCertDAO = mock(GiftCertificateDAO.class);
-        when(giftCertDAO.save(giftCertificate)).thenReturn(giftCertificate);
-        when(giftCertDAO.save(giftCertificateUpdated)).thenReturn(giftCertificate);
-        when(giftCertDAO.findAll()).thenReturn(new ArrayList<GiftCertificate>(Arrays.asList(giftCertificateUpdated)));
-        giftCertificateService = new GiftCertificateServiceImpl(giftCertDAO);
-    }
-
     @Test
     public void checkModelMapperResult(){
         GiftCertificate giftCertificate = new GiftCertificate();
@@ -54,6 +34,8 @@ class SpringBootTestApplicationTests {
         GiftCertificateDto giftDto = modelMapper().map(giftCertificate, GiftCertificateDto.class);
         assertEquals(giftDto.getId(), giftCertificate.getId());
     }
+
+
 
 
 }
