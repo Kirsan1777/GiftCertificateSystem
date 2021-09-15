@@ -11,8 +11,8 @@
     <groupId>com.example.server</groupId>
     <artifactId>server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
-    <name>SpringBootTestServer</name>
+    <packaging>pom</packaging>
+    <name>SpringBootTest</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>

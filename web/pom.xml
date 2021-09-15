@@ -11,8 +11,8 @@
     <groupId>com.example.web</groupId>
     <artifactId>web</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
-    <name>SpringBootTestWeb</name>
+    <packaging>pom</packaging>
+    <name>SpringBootTest</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
