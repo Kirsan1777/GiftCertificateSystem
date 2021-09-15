@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-public class ServiceConfiguration {
+public class ServiceConfigurationTest {
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
