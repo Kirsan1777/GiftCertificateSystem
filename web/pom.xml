@@ -11,7 +11,7 @@
     <groupId>com.example.web</groupId>
     <artifactId>web</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
     <name>SpringBootTest</name>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -54,13 +54,22 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.19</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>5.5.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.example.server</groupId>-->
-<!--            <artifactId>server</artifactId>-->
-<!--            <version>0.0.1-SNAPSHOT</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.example.server</groupId>-->
+        <!--            <artifactId>server</artifactId>-->
+        <!--            <version>0.0.1-SNAPSHOT</version>-->
+        <!--            <scope>compile</scope>-->
+        <!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
         <dependency>
@@ -68,9 +77,22 @@
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.example.server</groupId>
+            <artifactId>server</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>com.example.server</groupId>-->
+        <!--            <artifactId>server</artifactId>-->
+        <!--            <version>0.0.1-SNAPSHOT</version>-->
+        <!--            <scope>compile</scope>-->
+        <!--        </dependency>-->
 
     </dependencies>
-
-
+    <modules>
+        <module>../server</module>
+    </modules>
 
 </project>
