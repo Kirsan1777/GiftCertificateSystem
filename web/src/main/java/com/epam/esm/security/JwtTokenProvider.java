@@ -21,11 +21,11 @@ import java.util.*;
 @Component
 public class JwtTokenProvider {
 
-    //@Value("${jwt.token.secret}")
-    private String secret = "secret";
-    //@Value("${jwt.header}")
-    private String authorization = "Authorization";
-    //@Value("${jwt.token.expired}")
+    @Value("${jwt.token.secret}")
+    private String secret;
+    @Value("${jwt.header}")
+    private String authorization;
+    @Value("${jwt.token.expired}")
     private long validityInMilliseconds;
 
     private JwtUserDetailsService userDetailsService;
