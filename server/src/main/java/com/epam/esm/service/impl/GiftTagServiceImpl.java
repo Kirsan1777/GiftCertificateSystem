@@ -24,7 +24,7 @@ public class GiftTagServiceImpl implements GiftTagService {
         Tag tag = new Tag();
         if (tagDAO.findTagByName(nameTag) == null) {
             tag.setName(nameTag);
-            tagDAO.save(tag);;
+            tagDAO.save(tag);
         }
         int id = tagDAO.findTagByName(nameTag).getId();
         tagDAO.addTagToGift(id, idGiftCertificate);
