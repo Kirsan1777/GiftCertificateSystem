@@ -39,56 +39,43 @@ class GiftCertificateTest {
             LocalDateTime.of(2017, Month.NOVEMBER, 30, 0, 0),
             LocalDateTime.of(2017, Month.NOVEMBER, 30, 0, 0),
             "newGift", null);
-    private static GiftCertificate giftCertificateUpdated = new GiftCertificate(1, "newTagUpdate", 200, 1,
-            LocalDateTime.of(2017, Month.NOVEMBER, 30, 0, 0),
-            LocalDateTime.of(2017, Month.NOVEMBER, 30, 0, 0),
-            "newGift", null);
     private GiftCertificateDto giftDto = modelMapper().map(giftCertificate, GiftCertificateDto.class);
 
-    @BeforeAll
-    public static void setup() {
-        GiftCertificateDAO giftCertDAO = mock(GiftCertificateDAO.class);
-        when(giftCertDAO.save(giftCertificate)).thenReturn(giftCertificate);
-        when(giftCertDAO.save(giftCertificateUpdated)).thenReturn(giftCertificate);
-        when(giftCertDAO.findAll()).thenReturn(new ArrayList<GiftCertificate>(Arrays.asList(giftCertificateUpdated)));
-        giftCertificateService = new GiftCertificateServiceImpl(giftCertDAO);
-    }
-
     @Test
-    void addGiftTestValid(){
+    void addGiftCertificate(){
         giftCertificateService.addGiftCertificate(giftDto);
         verify(giftCertificateService, times(1)).addGiftCertificate(any(GiftCertificateDto.class));
     }
 
     @Test
-    void addGiftWithResultTestValid(){
+    void addGiftCertificateWithResult(){
         GiftCertificateDto gift = giftDto;
         when(giftCertificateService.addGiftCertificateWithResult(any(GiftCertificateDto.class))).thenReturn(giftCertificate);
         assertEquals(giftCertificate, giftCertificateService.addGiftCertificateWithResult(gift));
     }
 
     @Test
-    void findOneGiftCertificateTest(){
+    void findById(){
         GiftCertificateDto gift = giftDto;
         when(giftCertificateService.findById(1)).thenReturn(gift);
         assertEquals(gift, giftCertificateService.findById(1));
     }
 
     @Test
-    void deleteGiftTest(){
+    void deleteGiftCertificate(){
         giftCertificateService.deleteGiftCertificate(1);
         verify(giftCertificateService, times(1)).deleteGiftCertificate(any(int.class));
     }
 
     @Test
-    void updateGiftTest(){
+    void updateGiftCertificate(){
         GiftCertificateDto gift = giftDto;
         giftCertificateService.updateGiftCertificate(gift);
         verify(giftCertificateService, times(1)).updateGiftCertificate(any(GiftCertificateDto.class));
     }
 
     @Test
-    void updateGiftPriceTest(){
+    void updateGiftCertificatePrice(){
         GiftCertificateDto gift = giftDto;
         giftCertificateService.updateGiftCertificatePrice(gift.getId(), gift.getPrice());
         verify(giftCertificateService, times(1)).updateGiftCertificatePrice(any(int.class), any(double.class));
