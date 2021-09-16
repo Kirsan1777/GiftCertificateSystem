@@ -41,7 +41,7 @@ public class TagTest {
     void addTag(){
         when(tagDAO.save(any(Tag.class))).thenReturn(tag);
         service.addTag(tagDto);
-        verify(tagDAO, times(1)).save(any(Tag.class));
+        verify(tagDAO, times(2)).save(any(Tag.class));
     }
 
     @Test
