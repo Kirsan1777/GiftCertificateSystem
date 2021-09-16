@@ -12,11 +12,15 @@
     <artifactId>demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>SpringBootTest</name>
+    <name>SpringBootTestMain</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
     </properties>
+    <modules>
+        <module>web</module>
+        <module>server</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -55,10 +59,5 @@
             <version>8.0.19</version>
         </dependency>
     </dependencies>
-
-    <modules>
-        <module>web</module>
-        <module>server</module>
-    </modules>
 
 </project>
