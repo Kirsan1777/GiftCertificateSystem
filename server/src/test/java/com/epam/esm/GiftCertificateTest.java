@@ -77,7 +77,7 @@ class GiftCertificateTest {
     @Test
     void deleteGiftTest(){
         giftCertificateService.deleteGiftCertificate(1);
-        verify(giftCertificateService, times(1)).deleteGiftCertificate(any(int.class));
+        verify(giftCertificateService, times(2)).deleteGiftCertificate(any(int.class));
     }
 
     @Test
