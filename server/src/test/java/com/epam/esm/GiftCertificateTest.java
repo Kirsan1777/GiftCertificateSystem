@@ -57,7 +57,7 @@ class GiftCertificateTest {
     @Test
     void addGiftTestValid(){
         giftCertificateService.addGiftCertificate(giftDto);
-        verify(giftCertificateService, times(1)).addGiftCertificate(any(GiftCertificateDto.class));
+        verify(giftCertificateService, times(2)).addGiftCertificate(any(GiftCertificateDto.class));
     }
 
     @Test
